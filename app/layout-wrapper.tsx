@@ -1,0 +1,28 @@
+'use client';
+
+import React from 'react';
+import { Layout } from 'antd';
+import Navbar from '@/app/components/Navbar';
+import Footer from '@/app/components/Footer';
+import FloatingWhatsApp from '@/app/components/FloatingWhatsApp';
+
+const { Content } = Layout;
+
+export default function LayoutWrapperComponent({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <Layout>
+      <Navbar />
+      <Content className="landing-content">
+        <div style={{ margin: '0 auto' }}>
+          {children}
+        </div>
+      </Content>
+      <FloatingWhatsApp />
+      <Footer />
+    </Layout>
+  );
+}

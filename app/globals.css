@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary: #323288;
+  --secondary: #ffd300;
+  --black: #000000;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-black: var(--black);
+  --font-sans: var(--font-montserrat);
+  --font-mono: var(--font-geist-mono);
+  
+  /* No rounded corners - sharp design */
+  --radius-none: 0px;
+  --radius-sm: 0px;
+  --radius: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --radius-full: 0px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.primary {
+  background: var(--primary) !important;
+  color: #fff;
+    font-family: var(--font-montserrat), sans-serif;
+}
+
+.secondary {
+  background: var(--secondary) !important;
+  color: #000;
+  font-family: var(--font-montserrat), sans-serif;
+}
+
+.font-anton {
+  font-family: var(--font-montserrat), sans-serif;
+}
+
+/* Styles for the @cloudfour/image-compare component */
+.rexco-compare {
+  /* Make handle square, blue, with white chevrons */
+  --thumb-background-color: var(--primary);
+  --thumb-radius: 0%;
+  --thumb-size: 3rem;
+  --thumb-border-size: 0px;
+  /* Divider line styling */
+  --border-color: #ffffff;
+  --border-width: 3px;
+  /* Set currentColor for built-in chevrons */
+  color: #ffffff;
+}

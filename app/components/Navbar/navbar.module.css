@@ -1,0 +1,111 @@
+/* Desktop Menu Item */
+.desktopMenuItem {
+  position: relative;
+}
+
+.desktopMenuButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px;
+  color: #323288;
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.desktopMenuButton:hover {
+  color: #323288;
+  border-bottom-color: #323288;
+}
+
+/* Desktop Dropdown */
+.desktopMenuDropdown {
+  position: relative;
+}
+
+.desktopMenuDropdown:hover .desktopMenuButton {
+  border-bottom-color: #323288;
+}
+
+.desktopMenuPanel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  background: #ffd300;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+}
+
+.desktopMenuDropdown:hover .desktopMenuPanel {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.desktopMenuLink {
+  display: block;
+  padding: 16px 20px;
+  color: #1b1b1b;
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.desktopMenuLink:last-child {
+  border-bottom: none;
+}
+
+.desktopMenuLink:hover {
+  background: #323288;
+  color: #ffffff;
+}
+
+/* Smooth transitions for mobile menu */
+@media (max-width: 1023px) {
+  .desktopMenuItem,
+  .desktopMenuButton,
+  .desktopMenuDropdown,
+  .desktopMenuPanel {
+    display: none;
+  }
+}
+
+/* Prevent flash of content */
+.mobileMenuContent {
+  will-change: max-height;
+}
+
+/* Custom scrollbar for mobile menu */
+@media (max-width: 1023px) {
+  .mobileMenuContent::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .mobileMenuContent::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .mobileMenuContent::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 2px;
+  }
+
+  .mobileMenuContent::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}
