@@ -80,7 +80,7 @@ const articles = [
     description:
       "Temukan berbagai macam power tools berkualitas tinggi dari RYU yang dirancang untuk memenuhi kebutuhan konstruksi, bengkel, dan proyek DIY Anda.",
 
-    category: "News",
+    category: "Newss",
     date: "10 March 2024",
   },
 ];
