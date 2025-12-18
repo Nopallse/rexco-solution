@@ -161,8 +161,6 @@ Dijamin Kualitas 3x lebih baik &amp; Harga lebih murah.</p>
 // Latest products use the same data
 const latestProducts = products;
 
-
-
 export default function ProductDetailPage() {
   const params = useParams();
   const [selectedImage, setSelectedImage] = useState(0);
@@ -182,7 +180,7 @@ export default function ProductDetailPage() {
   if (!product) {
     return (
       <div className="bg-white py-20">
-        <div className="container mx-auto max-w-screen-xl px-8 sm:px-12 lg:px-16 text-center">
+        <div className="container mx-auto max-w-screen-xl px-8 sm:px-12 lg:px-16">
           <h1 className="text-3xl font-bold text-gray-800 mb-4">
             Product Not Found
           </h1>
@@ -195,26 +193,26 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <div className="bg-white py-20">
+    <div className="bg-white py-8 sm:py-12 lg:py-20">
       <div className="container mx-auto max-w-screen-xl px-8 sm:px-12 lg:px-16">
         {/* Product Detail Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 mb-12 sm:mb-16 lg:mb-20">
           {/* Left Column - Info */}
           <div className="order-2 lg:order-1">
-            <h1 className="text-5xl sm:text-6xl font-extrabold text-primary mb-8 uppercase">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-primary mb-4 sm:mb-6 lg:mb-8 uppercase leading-tight">
               {product.name}
             </h1>
 
             {/* Description */}
-            <div className="mb-6 max-h-72 overflow-y-auto pr-2">
+            <div className="mb-4 sm:mb-6 max-h-60 sm:max-h-72 overflow-y-auto pr-2">
               {typeof product.description === "string" &&
               product.description.trim().startsWith("<") ? (
                 <div
-                  className="text-gray-700 text-base leading-relaxed"
+                  className="text-gray-700 text-sm sm:text-base leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: product.description }}
                 />
               ) : (
-                <p className="text-gray-700 text-base leading-relaxed">
+                <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
                   {product.description}
                 </p>
               )}
@@ -222,15 +220,17 @@ export default function ProductDetailPage() {
 
             {/* Variants */}
             {product.variant && product.variant.length > 0 && (
-              <div className="mb-6 p-6 bg-[#f0f2fb]">
-                <h3 className=" text-primary mb-3">Beli melalui:</h3>
-                <div className="flex flex-wrap gap-3 mb-4">
+              <div className="mb-4 sm:mb-6 p-4 sm:p-6 bg-[#f0f2fb]">
+                <h3 className="text-sm sm:text-base font-semibold text-primary mb-3">
+                  Beli melalui:
+                </h3>
+                <div className="flex flex-wrap gap-2 sm:gap-3 mb-4">
                   {product.variant.map((v, index) => (
                     <button
                       key={index}
                       type="button"
                       onClick={() => setSelectedVariant(index)}
-                      className={`px-6 py-3    text-base uppercase transition-colors
+                      className={`px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base uppercase transition-colors
                         ${
                           selectedVariant === index
                             ? "bg-primary text-secondary"
@@ -243,37 +243,39 @@ export default function ProductDetailPage() {
                   ))}
                 </div>
                 {/* Marketplace Icons */}
-                <div className="flex gap-3">
-                  <a
-                    href="https://www.tokopedia.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-12 h-12 bg-[#42B549] rounded-full flex items-center justify-center hover:opacity-80 transition-opacity"
-                    title="Tokopedia"
-                  >
-                    <svg
-                      className="w-7 h-7 text-white"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
+                <div className="flex gap-2 sm:gap-3">
+                  <div className="flex gap-2 sm:gap-3">
+                    <a
+                      href="https://tokopedia.co.id/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center hover:opacity-80 transition-opacity"
+                      title="Tokopedia"
+                                              style={{ borderRadius: "100%" }}
+
                     >
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
-                    </svg>
-                  </a>
-                  <a
-                    href="https://shopee.co.id/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-12 h-12 bg-[#EE4D2D] rounded-full flex items-center justify-center hover:opacity-80 transition-opacity"
-                    title="Shopee"
-                  >
-                    <svg
-                      className="w-7 h-7 text-white"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
+                      <img
+                        src="/images/icon/tokopedia_icon.png"
+                        alt="Tokopedia"
+                        className="w-5 h-5 sm:w-7 sm:h-7 object-contain"
+                      />
+                    </a>
+                    <a
+                      href="https://shopee.co.id/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center hover:opacity-80 transition-opacity"
+                      title="Shopee"
+                                              style={{ borderRadius: "100%" }}
+
                     >
-                      <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 18c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" />
-                    </svg>
-                  </a>
+                      <img
+                        src="/images/icon/shopee_icon.png"
+                        alt="Shopee"
+                        className="w-5 h-5 sm:w-7 sm:h-7 object-contain"
+                      />
+                    </a>
+                  </div>
                 </div>
               </div>
             )}
@@ -282,8 +284,8 @@ export default function ProductDetailPage() {
 
             {/* YouTube Video */}
             {product.youtube && (
-              <div className="">
-                <h3 className="text-lg font-bold text-primary mb-3 flex items-center gap-2">
+              <div className="mt-4 sm:mt-6">
+                <h3 className="text-base sm:text-lg font-bold text-primary mb-3 flex items-center gap-2">
                   <PlayCircleOutlined className="text-xl" />
                   Product Video
                 </h3>
@@ -307,10 +309,10 @@ export default function ProductDetailPage() {
 
           {/* Right Column - Image Gallery */}
           <div className="order-1 lg:order-2">
-            <div className="bg-white overflow-hidden sticky top-24">
+            <div className="bg-white overflow-hidden lg:sticky lg:top-24">
               {/* Main Image */}
               <div
-                className="bg-white p-8 mb-4 border border-gray-200 overflow-hidden relative cursor-zoom-in"
+                className="bg-white p-4 sm:p-6 lg:p-8 mb-4 border border-gray-200 overflow-hidden relative cursor-zoom-in"
                 onMouseMove={handleMouseMove}
                 onMouseEnter={() => setIsZoomed(true)}
                 onMouseLeave={() => setIsZoomed(false)}
@@ -318,7 +320,7 @@ export default function ProductDetailPage() {
                 <img
                   src={product.image[selectedImage] || "/images/product.jpg"}
                   alt={product.name}
-                  className="w-full h-auto object-contain max-h-[500px] mx-auto"
+                  className="w-full h-auto object-contain max-h-[300px] sm:max-h-[400px] lg:max-h-[500px] mx-auto"
                   style={{
                     transform: isZoomed ? "scale(2)" : "scale(1)",
                     transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
@@ -329,7 +331,7 @@ export default function ProductDetailPage() {
 
               {/* Thumbnail Images */}
               {product.image && product.image.length > 1 && (
-                <div className="grid grid-cols-4 gap-4 mb-8">
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-4 mb-6 sm:mb-8">
                   {product.image.map((img, index) => (
                     <button
                       key={index}
@@ -351,18 +353,18 @@ export default function ProductDetailPage() {
               )}
 
               {product.dokument && product.dokument.length > 0 && (
-                <div className="mt-6 p-6 bg-[#f0f2fb]">
-                  <h3 className="text-primary font-semibold mb-3 flex items-center gap-2">
+                <div className="mt-4 sm:mt-6 p-4 sm:p-6 bg-[#f0f2fb]">
+                  <h3 className="text-sm sm:text-base text-primary font-semibold mb-3 flex items-center gap-2">
                     Dokumen:
                   </h3>
-                  <div className="flex flex-wrap gap-3 mb-4">
+                  <div className="flex flex-wrap gap-2 sm:gap-3 mb-4">
                     {product.dokument.map((doc, index) => (
                       <a
                         key={index}
                         href={doc}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white hover:bg-secondary hover:text-primary transition-colors text-base font-semibold uppercase rounded"
+                        className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-primary text-white hover:bg-secondary hover:text-primary transition-colors text-sm sm:text-base font-semibold uppercase rounded"
                       >
                         <DownloadOutlined />
                         {doc.includes("MSDS")
@@ -373,7 +375,6 @@ export default function ProductDetailPage() {
                       </a>
                     ))}
                   </div>
-                  
                 </div>
               )}
             </div>
@@ -381,14 +382,14 @@ export default function ProductDetailPage() {
         </div>
 
         {/* Latest Products Section */}
-        <section className="mb-20">
-          <div className="text-center mb-8">
-            <h3 className="text-5xl sm:text-6xl font-bold text-primary mb-2">
+        <section className="mb-12 sm:mb-16 lg:mb-20">
+          <div className="text-center mb-6 sm:mb-8">
+            <h3 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-primary mb-2">
               Related Products
             </h3>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8">
             {latestProducts.slice(0, 8).map((item) => (
               <Link href={`/product/${item.id}`} key={item.id}>
                 <div className="flex flex-col items-center h-full">
@@ -401,11 +402,11 @@ export default function ProductDetailPage() {
                     />
                   </div>
                   {/* Title - clamp to 2 lines */}
-                  <h4 className="text-lg lg:text-xl font-bold my-6 text-center uppercase leading-tight min-h-[3.5rem] line-clamp-2 flex items-center justify-center">
+                  <h4 className="text-sm sm:text-base lg:text-lg font-bold my-3 sm:my-4 lg:my-6 text-center uppercase leading-tight min-h-[2.5rem] sm:min-h-[3rem] lg:min-h-[3.5rem] line-clamp-2 flex items-center justify-center">
                     {item.name}
                   </h4>
                   {/* Button */}
-                  <button className="w-full bg-primary text-white font-extrabold h-[70px] text-base tracking-wide uppercase flex items-center justify-between px-6 hover:bg-secondary hover:text-primary transition-colors cursor-pointer mt-auto">
+                  <button className="w-full bg-primary text-white font-extrabold h-[50px] sm:h-[60px] lg:h-[70px] text-xs sm:text-sm lg:text-base tracking-wide uppercase flex items-center justify-between px-3 sm:px-4 lg:px-6 hover:bg-secondary hover:text-primary transition-colors cursor-pointer mt-auto">
                     <span>LEBIH DETAIL</span>
                     <span className="text-2xl">→</span>
                   </button>
@@ -414,8 +415,6 @@ export default function ProductDetailPage() {
             ))}
           </div>
         </section>
-
-        
       </div>
     </div>
   );

@@ -153,45 +153,45 @@ export default function DocumentsPage() {
     },
   ];
   return (
-    <div className="bg-white py-20">
+    <div className="bg-white py-8 sm:py-12 lg:py-20">
       <div className="container mx-auto max-w-screen-xl px-8 sm:px-12 lg:px-16">
-        <div className="mb-16">
-          <h2 className="text-5xl lg:text-6xl font-bold text-primary mb-4  decoration-2 underline-offset-4">
+        <div className="mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-primary mb-4 decoration-2 underline-offset-4">
             Dokumen (MSDS dan TDS)
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           {products.slice(0, 8).map((item) => (
             <Link href={`/product/${item.id}`} key={item.id}>
-              <div className="flex flex-col items-center h-full border-1 border-gray-300">
+              <div className="flex flex-col items-center h-full border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
                 {/* Square image area with light background */}
-                <div className="w-full  aspect-square flex items-center justify-center transition-transform duration-300 hover:translate-y-[-6px]">
+                <div className="w-full aspect-square flex items-center justify-center transition-transform duration-300 hover:translate-y-[-6px] bg-[#f7f8fc] p-4 sm:p-6">
                   <img
                     src={item.image?.[0] || "/images/product.jpg"}
                     alt={item.name}
-                    className="max-h-[70%] w-full aspect-square object-contain border-gray-300 border-b-1 mx-4"
+                    className="max-h-[70%] w-full aspect-square object-contain mx-2 sm:mx-4"
                   />
                 </div>
-                <div className="p-8 pt-0 flex flex-col flex-1">
+                <div className="p-4 sm:p-6 lg:p-8 pt-0 flex flex-col flex-1 w-full">
                   {/* Title - clamp to 2 lines */}
                   <h4
                     className="
-              text-xl lg:text-2xl
+              text-base sm:text-lg lg:text-2xl
               font-extrabold
               uppercase
               leading-tight
               line-clamp-2
-              min-h-[3.5rem]
+              min-h-[2.5rem] sm:min-h-[3rem] lg:min-h-[3.5rem]
               flex
-              mb-6
+              mb-3 sm:mb-4 lg:mb-6
             "
                   >
                     {item.name}
                   </h4>
 
                   <div className="flex w-full mt-auto">
-                    <button className="w-1/2 bg-primary text-white font-extrabold h-[60px] text-base uppercase flex items-center justify-center hover:bg-secondary hover:text-black transition-colors">
+                    <button className="w-1/2 bg-primary text-white font-extrabold h-12 sm:h-14 text-sm sm:text-base uppercase flex items-center justify-center hover:bg-secondary hover:text-black transition-colors">
                       <span className="flex items-center gap-2">
                         MSDS
                         <svg
@@ -204,7 +204,7 @@ export default function DocumentsPage() {
                       </span>
                     </button>
 
-                    <button className="w-1/2 bg-secondary text-black font-extrabold h-[60px] text-base uppercase flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
+                    <button className="w-1/2 bg-secondary text-black font-extrabold h-12 sm:h-14 text-sm sm:text-base uppercase flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
                       <span className="flex items-center gap-2">
                         TDS
                         <svg
@@ -222,7 +222,8 @@ export default function DocumentsPage() {
                     className="
               
               w-full
-              h-[70px]
+              h-12 sm:h-14 lg:h-16
+              text-sm sm:text-base
               text-gray-600
               font-extrabold
               uppercase
@@ -234,8 +235,7 @@ export default function DocumentsPage() {
                   >
                     <div className="flex items-center justify-between w-full">
                       <div className="flex flex-col items-start">
-                        <span>Ke halaman</span>
-                        <span>Produk</span>
+                        <span>Ke halaman Produk</span>
                       </div>
                       <span className="flex items-center justify-center transition-transform group-hover:translate-x-1">
                         <svg
