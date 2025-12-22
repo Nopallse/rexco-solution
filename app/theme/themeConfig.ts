@@ -42,7 +42,7 @@ const theme: ThemeConfig = {
   },
   components: {
     Button: {
-      primaryColor: '#2a6932',
+      primaryColor: '#ffffffff',
       controlHeight: 40,
       fontSize: 16,
     },
