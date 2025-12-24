@@ -1,10 +1,21 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "antd";
-// Removed invalid import of '@cloudfour/image-compare'
 
 export default function ProtectSection() {
+  useEffect(() => {
+    // Dynamically import and register the image-compare web component
+    const loadImageCompare = () => {
+      if (typeof window === 'undefined') return;
+      import('@cloudfour/image-compare').catch((error) => {
+        console.error('Failed to load image-compare:', error);
+      });
+    };
+    
+    loadImageCompare();
+  }, []);
+
   return (
     <div className="container mx-auto max-w-full bg-primary">
       <div className="bg-primary">

@@ -103,12 +103,11 @@ export default function UsesSection() {
           <h2 className="text-3xl lg:text-4xl font-bold text-primary mb-4 decoration-2 underline-offset-4">
             3000++ USES OF REXCO
           </h2>
-          <p className="text-gray-600 max-w-2xl">
-            Jelajahi video tips dan hacks REXCO. Pilih salah satu untuk menontonnya.
-          </p>
+          <hr className="mb-8" />
+
         </div>
 
-        <div className="space-y-6 lg:space-y-8">
+        <div className="">
           {/* Main player */}
           <div className="w-full bg-black/70 rounded-lg overflow-hidden shadow-md">
             <div className="relative w-full aspect-[9/16] sm:aspect-video bg-black">
@@ -121,17 +120,6 @@ export default function UsesSection() {
                 className="absolute inset-0 h-full w-full"
                 referrerPolicy="strict-origin-when-cross-origin"
               />
-            </div>
-            <div className="flex items-center justify-between bg-black/80 text-white px-4 py-3 text-sm sm:text-base">
-              <span className="font-semibold">{activeVideo.title}</span>
-              <a
-                href={`https://www.youtube.com/watch?v=${activeVideo.videoId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-secondary font-semibold hover:underline"
-              >
-                Tonton di YouTube
-              </a>
             </div>
           </div>
 

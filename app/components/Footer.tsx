@@ -38,17 +38,17 @@ export default function Footer() {
               <h3 className="font-bold text-lg  text-white mb-2 underline ">PRODUCT</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link href="/category/power-tools" className="text-white text-md font-bold no-underline">
+                  <Link href="/category/power-tools" className="!text-white !text-md !font-bold !no-underline">
                   REXCO 50 | MULTIPURPOSE LUBRICANT
                   </Link>
                 </li>
                 <li>
-                  <Link href="/category/engine" className="text-white text-md font-bold no-underline">
+                  <Link href="/category/engine" className="!text-white !text-md !font-bold !no-underline">
                   REXCO 18 | SPECIALIST CONTACT CLEANER
                   </Link>
                 </li>
                 <li>
-                  <Link href="/category/accessories" className="text-white text-md font-bold no-underline">
+                  <Link href="/category/accessories" className="!text-white !text-md !font-bold !no-underline">
                   REXCO 81 | CARB & INJECTOR CLEANER
                   </Link>
                 </li>
@@ -59,12 +59,12 @@ export default function Footer() {
             <div>
               <ul className="space-y-3">
                 <li>
-                  <Link href="/contact"  className="text-white text-md font-bold no-underline">
+                  <Link href="/contact"  className="!text-white !text-md !font-bold !no-underline">
                     GALLERY
                   </Link>
                 </li>
                 <li>
-                  <Link href="/service-center"  className="text-white text-md font-bold no-underline">
+                  <Link href="/service-center"  className="!text-white !text-md !font-bold !no-underline">
                     ARTICLE
                   </Link>
                 </li>
@@ -75,12 +75,12 @@ export default function Footer() {
             <div>
               <ul className="space-y-3">
                 <li>
-                  <Link href="/contact"  className="text-white text-md font-bold no-underline">
+                  <Link href="/contact"  className="!text-white !text-md !font-bold !no-underline">
                     CONTACT US
                   </Link>
                 </li>
                 <li>
-                  <Link href="/service-center"  className="text-white text-md font-bold no-underline">
+                  <Link href="/service-center"  className="!text-white !text-md !font-bold !no-underline">
                     WHERE TO BUY
                   </Link>
                 </li>

@@ -8,3 +8,9 @@ declare namespace JSX {
     };
   }
 }
+
+// Allow importing the web component package without type definitions
+declare module '@cloudfour/image-compare' {
+  const register: unknown;
+  export default register;
+}

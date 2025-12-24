@@ -121,7 +121,7 @@ const ContactPage = () => {
                 href="https://api.whatsapp.com/send?phone=6287777000966"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-secondary font-bold text-sm sm:text-base break-all"
+                className="!text-secondary font-bold text-sm sm:text-base break-all"
                 >
                 6287777000966
                 </a>
@@ -147,7 +147,7 @@ const ContactPage = () => {
                 <p className="text-lg sm:text-xl lg:text-2xl font-semibold">E-mail</p>
                 <a
                 href="mailto:rexco.indonesia@gmail.com"
-                className="text-secondary font-bold uppercase tracking-wide text-sm sm:text-base break-all"
+                className="!text-secondary font-bold uppercase tracking-wide text-sm sm:text-base break-all"
                 >
                 rexco.indonesia@gmail.com
                 </a>

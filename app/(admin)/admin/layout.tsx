@@ -15,9 +15,13 @@ import {
   UserOutlined,
   LogoutOutlined,
   SettingOutlined,
+  FileImageOutlined,
+  InstagramOutlined,
+  PictureOutlined,
 } from '@ant-design/icons';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { logout } from '@/app/lib/auth-client';
 import type { MenuProps } from 'antd';
 
 const { Header, Sider, Content } = Layout;
@@ -26,6 +30,24 @@ const { Text } = Typography;
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Clear auth anyway and redirect
+      router.push('/login');
+    }
+  };
+
+  const handleMenuClick: MenuProps['onClick'] = (e) => {
+    if (e.key === 'logout') {
+      handleLogout();
+    }
+  };
 
   const menuItems: MenuProps['items'] = [
     {
@@ -34,38 +56,9 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       label: <Link href="/admin/dashboard">Dashboard</Link>,
     },
     {
-      key: 'products',
+      key: '/admin/products',
       icon: <AppstoreOutlined />,
-      label: 'Products',
-      children: [
-        {
-          key: '/admin/products',
-          label: <Link href="/admin/products">All Products</Link>,
-        },
-        {
-          key: '/admin/products/featured',
-          label: <Link href="/admin/products/featured">Featured Products</Link>,
-        },
-        {
-          key: '/admin/products/latest',
-          label: <Link href="/admin/products/latest">Latest Products</Link>,
-        },
-      ],
-    },
-    {
-      key: 'categories',
-      icon: <TagsOutlined />,
-      label: 'Categories',
-      children: [
-        {
-          key: '/admin/categories',
-          label: <Link href="/admin/categories">All Categories</Link>,
-        },
-        {
-          key: '/admin/categories/subcategories',
-          label: <Link href="/admin/categories/subcategories">Subcategories</Link>,
-        },
-      ],
+      label: <Link href="/admin/products">Products</Link>,
     },
     {
       key: '/admin/blog',
@@ -73,14 +66,26 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       label: <Link href="/admin/blog">Blog & Articles</Link>,
     },
     {
-      key: '/admin/news',
-      icon: <FileTextOutlined />,
-      label: <Link href="/admin/news">News & Articles</Link>,
+      key: '/admin/brochures',
+      icon: <FilePdfOutlined />,
+      label: <Link href="/admin/brochures">brochures</Link>,
     },
     {
-      key: '/admin/catalogs',
-      icon: <FilePdfOutlined />,
-      label: <Link href="/admin/catalogs">Catalogs</Link>,
+      key: 'gallery',
+      icon: <FileImageOutlined />,
+      label: 'Gallery',
+      children: [
+        {
+          key: '/admin/gallery/instagram',
+          icon: <InstagramOutlined />,
+          label: <Link href="/admin/gallery/instagram">Instagram</Link>,
+        },
+        {
+          key: '/admin/gallery/web-gallery',
+          icon: <PictureOutlined />,
+          label: <Link href="/admin/gallery/web-gallery">Web Gallery</Link>,
+        },
+      ],
     },
     {
       key: '/admin/service-centers',
@@ -144,7 +149,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
         <Menu
           mode="inline"
           selectedKeys={[getSelectedKey()]}
-          defaultOpenKeys={['products', 'categories']}
+          defaultOpenKeys={['categories', 'gallery']}
           items={menuItems}
           className="border-0 !bg-white mt-4"
           style={{
@@ -162,7 +167,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
             {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
           </button>
 
-          <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
+          <Dropdown menu={{ items: userMenuItems, onClick: handleMenuClick }} placement="bottomRight">
             <Space className="cursor-pointer hover:bg-gray-50 px-3 py-2 rounded-lg transition-colors">
               <Avatar icon={<UserOutlined />} className="bg-green-600" />
               <div className="hidden md:block">

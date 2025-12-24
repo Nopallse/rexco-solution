@@ -1,220 +1,153 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Table,
   Button,
   Space,
   Input,
   Tag,
-  Modal,
-  Form,
-  Select,
-  Upload,
-  message,
-  Popconfirm,
   Card,
+  App,
+  Image,
 } from 'antd';
 import {
   PlusOutlined,
   SearchOutlined,
   EditOutlined,
   DeleteOutlined,
+  ReloadOutlined,
   EyeOutlined,
-  UploadOutlined,
+  ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
-import Link from 'next/link';
+import {
+  listProducts,
+  deleteProduct,
+  ProductDto,
+} from '@/app/lib/product-client';
+import { getProductImageUrl } from '@/app/lib/image-utils';
 
-const { Option } = Select;
-const { TextArea } = Input;
-
-interface Product {
-  key: string;
-  id: string;
-  name: string;
-  category: string;
-  subcategory: string;
-  price: number;
-  stock: number;
-  status: 'active' | 'inactive';
-  featured: boolean;
-  image: string;
-}
+type ProductRow = ProductDto & { key: string };
 
 const ProductsPage = () => {
+  const router = useRouter();
+  const { message, modal } = App.useApp();
   const [searchText, setSearchText] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [form] = Form.useForm();
+  const [products, setProducts] = useState<ProductRow[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const products: Product[] = [
-    {
-      key: '1',
-      id: 'PRD001',
-      name: 'Angle Grinder RYU-AG100',
-      category: 'Power Tools',
-      subcategory: 'Metal Working',
-      price: 450000,
-      stock: 25,
-      status: 'active',
-      featured: true,
-      image: '/images/products/ag100.jpg',
-    },
-    {
-      key: '2',
-      id: 'PRD002',
-      name: 'Circular Saw RYU-CS185',
-      category: 'Power Tools',
-      subcategory: 'Wood Working',
-      price: 850000,
-      stock: 15,
-      status: 'active',
-      featured: false,
-      image: '/images/products/cs185.jpg',
-    },
-    {
-      key: '3',
-      id: 'PRD003',
-      name: 'Impact Drill RYU-ID750',
-      category: 'Power Tools',
-      subcategory: 'Metal Working',
-      price: 650000,
-      stock: 0,
-      status: 'inactive',
-      featured: false,
-      image: '/images/products/id750.jpg',
-    },
-  ];
+  const loadProducts = async () => {
+    setLoading(true);
+    try {
+      const data = await listProducts();
+      setProducts((data ?? []).map((item) => ({ ...item, key: item.id })) as ProductRow[]);
+    } catch (error) {
+      const err = error as Error;
+      message.error(err.message || 'Gagal memuat produk');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const columns: ColumnsType<Product> = [
+  useEffect(() => {
+    loadProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const filteredProducts = products.filter((p) =>
+    p.name.toLowerCase().includes(searchText.toLowerCase())
+  );
+
+  const columns: ColumnsType<ProductRow> = [
     {
-      title: 'Product ID',
-      dataIndex: 'id',
-      key: 'id',
-      width: 120,
+      title: 'Image',
+      dataIndex: 'primaryImage',
+      key: 'primaryImage',
+      width: 80,
+      render: (img?: string | null, record?: ProductRow) => {
+        const imageUrl = getProductImageUrl(record?.primaryImage, record?.productImage);
+        return (
+          <Image
+            src={imageUrl}
+            alt="product"
+            width={60}
+            height={60}
+            className="object-cover rounded"
+            preview={false}
+            fallback="/placeholder.png"
+          />
+        );
+      },
     },
     {
       title: 'Product Name',
       dataIndex: 'name',
       key: 'name',
-      filteredValue: [searchText],
-      onFilter: (value, record) =>
-        record.name.toLowerCase().includes(value.toString().toLowerCase()),
-    },
-    {
-      title: 'Category',
-      dataIndex: 'category',
-      key: 'category',
-      filters: [
-        { text: 'Power Tools', value: 'Power Tools' },
-        { text: 'Engine', value: 'Engine' },
-        { text: 'Accessories', value: 'Accessories' },
-      ],
-      onFilter: (value, record) => record.category === value,
-    },
-    {
-      title: 'Subcategory',
-      dataIndex: 'subcategory',
-      key: 'subcategory',
-    },
-    {
-      title: 'Price',
-      dataIndex: 'price',
-      key: 'price',
-      render: (price: number) => `Rp ${price.toLocaleString('id-ID')}`,
-      sorter: (a, b) => a.price - b.price,
-    },
-    {
-      title: 'Stock',
-      dataIndex: 'stock',
-      key: 'stock',
-      render: (stock: number) => (
-        <Tag color={stock > 0 ? 'success' : 'error'}>
-          {stock > 0 ? `${stock} items` : 'Out of Stock'}
-        </Tag>
+      render: (text: string, record: ProductRow) => (
+        <div>
+          <div className="font-medium text-gray-900">{text}</div>
+          <Tag className="mt-1" color="blue">{record.slug}</Tag>
+        </div>
       ),
-      sorter: (a, b) => a.stock - b.stock,
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status: string) => (
-        <Tag color={status === 'active' ? 'success' : 'default'}>
-          {status.toUpperCase()}
-        </Tag>
-      ),
-      filters: [
-        { text: 'Active', value: 'active' },
-        { text: 'Inactive', value: 'inactive' },
-      ],
-      onFilter: (value, record) => record.status === value,
-    },
-    {
-      title: 'Featured',
-      dataIndex: 'featured',
-      key: 'featured',
-      render: (featured: boolean) =>
-        featured ? <Tag color="blue">Featured</Tag> : <Tag>Regular</Tag>,
-    },
-    {
-      title: 'Action',
+      title: 'Actions',
       key: 'action',
       fixed: 'right',
-      width: 150,
-      render: (_, record) => (
+      width: 180,
+      render: (_: unknown, record: ProductRow) => (
         <Space size="small">
           <Button
-            type="text"
+            type="default"
             icon={<EyeOutlined />}
             size="small"
-            onClick={() => message.info(`Viewing product: ${record.name}`)}
-          />
+            onClick={() => router.push(`/admin/products/${record.id}`)}
+          >
+            Detail
+          </Button>
           <Button
             type="text"
             icon={<EditOutlined />}
             size="small"
-            onClick={() => handleEdit(record)}
+            onClick={() => router.push(`/admin/products/${record.id}/edit`)}
           />
-          <Popconfirm
-            title="Delete Product"
-            description="Are you sure you want to delete this product?"
-            onConfirm={() => handleDelete(record.id)}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button type="text" danger icon={<DeleteOutlined />} size="small" />
-          </Popconfirm>
+          <Button
+            type="text"
+            danger
+            icon={<DeleteOutlined />}
+            size="small"
+            onClick={() => showDeleteConfirm(record.id)}
+          />
         </Space>
       ),
     },
   ];
 
-  const handleEdit = (product: Product) => {
-    setEditingProduct(product);
-    form.setFieldsValue(product);
-    setIsModalOpen(true);
-  };
-
-  const handleDelete = (id: string) => {
-    message.success(`Product ${id} deleted successfully`);
-  };
-
-  const handleModalOk = () => {
-    form.validateFields().then((values) => {
-      console.log('Form values:', values);
-      message.success(editingProduct ? 'Product updated successfully' : 'Product added successfully');
-      setIsModalOpen(false);
-      form.resetFields();
-      setEditingProduct(null);
+  const showDeleteConfirm = (id: string) => {
+    modal.confirm({
+      title: 'Hapus Produk',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Apakah Anda yakin ingin menghapus produk ini?',
+      okText: 'Hapus',
+      okType: 'danger',
+      cancelText: 'Batal',
+      onOk() {
+        handleDelete(id);
+      },
     });
   };
 
-  const handleModalCancel = () => {
-    setIsModalOpen(false);
-    form.resetFields();
-    setEditingProduct(null);
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteProduct(id);
+      message.success('Produk berhasil dihapus');
+      await loadProducts();
+    } catch (error) {
+      const err = error as Error;
+      message.error(err.message || 'Gagal menghapus produk');
+    }
   };
 
   return (
@@ -222,17 +155,22 @@ const ProductsPage = () => {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Products Management</h1>
-          <p className="text-gray-600">Manage all your products, categories, and inventory</p>
+          <p className="text-gray-600">Kelola produk dengan data dari backend</p>
         </div>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          size="large"
-          onClick={() => setIsModalOpen(true)}
-          className="bg-green-600 hover:bg-green-700"
-        >
-          Add New Product
-        </Button>
+        <Space>
+          <Button icon={<ReloadOutlined />} onClick={loadProducts} loading={loading}>
+            Refresh
+          </Button>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            size="large"
+            onClick={() => router.push('/admin/products/create')}
+            className="bg-green-600 hover:bg-green-700"
+          >
+            Add New Product
+          </Button>
+        </Space>
       </div>
 
       <Card bordered={false} className="shadow-sm">
@@ -241,6 +179,7 @@ const ProductsPage = () => {
             placeholder="Search products by name..."
             prefix={<SearchOutlined />}
             size="large"
+            value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             className="max-w-md"
           />
@@ -248,8 +187,10 @@ const ProductsPage = () => {
 
         <Table
           columns={columns}
-          dataSource={products}
-          scroll={{ x: 1200 }}
+          dataSource={filteredProducts}
+          loading={loading}
+          rowKey="id"
+          scroll={{ x: 900 }}
           pagination={{
             pageSize: 10,
             showSizeChanger: true,
@@ -257,100 +198,6 @@ const ProductsPage = () => {
           }}
         />
       </Card>
-
-      <Modal
-        title={editingProduct ? 'Edit Product' : 'Add New Product'}
-        open={isModalOpen}
-        onOk={handleModalOk}
-        onCancel={handleModalCancel}
-        width={800}
-        okText={editingProduct ? 'Update' : 'Create'}
-        okButtonProps={{ className: 'bg-green-600' }}
-      >
-        <Form form={form} layout="vertical" className="mt-4">
-          <Form.Item
-            name="name"
-            label="Product Name"
-            rules={[{ required: true, message: 'Please enter product name' }]}
-          >
-            <Input placeholder="e.g., Angle Grinder RYU-AG100" size="large" />
-          </Form.Item>
-
-          <div className="grid grid-cols-2 gap-4">
-            <Form.Item
-              name="category"
-              label="Category"
-              rules={[{ required: true, message: 'Please select a category' }]}
-            >
-              <Select placeholder="Select category" size="large">
-                <Option value="Power Tools">Power Tools</Option>
-                <Option value="Engine">Engine</Option>
-                <Option value="Accessories">Accessories</Option>
-                <Option value="Welding">Welding</Option>
-              </Select>
-            </Form.Item>
-
-            <Form.Item
-              name="subcategory"
-              label="Subcategory"
-              rules={[{ required: true, message: 'Please select a subcategory' }]}
-            >
-              <Select placeholder="Select subcategory" size="large">
-                <Option value="Metal Working">Metal Working</Option>
-                <Option value="Wood Working">Wood Working</Option>
-                <Option value="General Working">General Working</Option>
-              </Select>
-            </Form.Item>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <Form.Item
-              name="price"
-              label="Price (Rp)"
-              rules={[{ required: true, message: 'Please enter price' }]}
-            >
-              <Input type="number" placeholder="450000" size="large" />
-            </Form.Item>
-
-            <Form.Item
-              name="stock"
-              label="Stock"
-              rules={[{ required: true, message: 'Please enter stock quantity' }]}
-            >
-              <Input type="number" placeholder="25" size="large" />
-            </Form.Item>
-          </div>
-
-          <Form.Item name="description" label="Description">
-            <TextArea rows={4} placeholder="Product description..." />
-          </Form.Item>
-
-          <div className="grid grid-cols-2 gap-4">
-            <Form.Item name="status" label="Status" initialValue="active">
-              <Select size="large">
-                <Option value="active">Active</Option>
-                <Option value="inactive">Inactive</Option>
-              </Select>
-            </Form.Item>
-
-            <Form.Item name="featured" label="Featured Product" initialValue={false}>
-              <Select size="large">
-                <Option value={true}>Yes</Option>
-                <Option value={false}>No</Option>
-              </Select>
-            </Form.Item>
-          </div>
-
-          <Form.Item name="image" label="Product Image">
-            <Upload listType="picture-card" maxCount={1}>
-              <div>
-                <UploadOutlined />
-                <div className="mt-2">Upload</div>
-              </div>
-            </Upload>
-          </Form.Item>
-        </Form>
-      </Modal>
     </div>
   );
 };

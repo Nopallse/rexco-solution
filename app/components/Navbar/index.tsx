@@ -3,9 +3,11 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Input } from "antd";
-import { SearchOutlined, MenuOutlined, CloseOutlined, DownOutlined } from "@ant-design/icons";
+import { SearchOutlined, MenuOutlined, CloseOutlined } from "@ant-design/icons";
 import styles from "./navbar.module.css";
+import { listProducts, ProductDto } from "@/app/lib/product-client";
 
 interface MenuItem {
   key: string;
@@ -14,40 +16,80 @@ interface MenuItem {
   children?: MenuItem[];
 }
 
-const menuItems: MenuItem[] = [
-  {
-    key: "product",
-    label: "Product",
-    children: [
-      { key: "rexco-50", label: "REXCO 50", href: "/product/rexco-50" },
-      { key: "rexco-70", label: "REXCO 70", href: "/product/rexco-70" },
-      { key: "rexco-18", label: "REXCO 18", href: "/product/rexco-18" },
-      { key: "rexco-25", label: "REXCO 25", href: "/product/rexco-25" },
-      { key: "rexco-20", label: "REXCO 20", href: "/product/rexco-20" },
-      { key: "rexco-60", label: "REXCO 60", href: "/product/rexco-60" },
-      { key: "rexco-81", label: "REXCO 81", href: "/product/rexco-81" },
-      { key: "rexco-82", label: "REXCO 82", href: "/product/rexco-82" },
-    ],
-  },
-  {
-    key: "documents",
-    label: "Documents",
-    children: [
-      { key: "brochures", label: "Brochures", href: "/brochures" },
-      { key: "documents-msds-tds", label: "MSDS DAN TDS", href: "/documents" },
-    ],
-  },
-  { key: "articles", label: "Articles", href: "/blogs" },
-  { key: "gallery", label: "Gallery", href: "/gallery" },
-  { key: "where-to-buy", label: "Where To Buy", href: "/where-to-buy" },
-  { key: "contact-us", label: "Contact Us", href: "/contact-us" },
-];
-
 const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
   const [language, setLanguage] = useState<"en" | "id">("en");
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  const [products, setProducts] = useState<ProductDto[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [activeMenuItem, setActiveMenuItem] = useState<string | null>(null);
+
+  const pathname = usePathname();
+
+  // Derive active menu from current path
+  useEffect(() => {
+    const p = pathname || "/";
+    if (p.startsWith("/product/")) {
+      setActiveMenuItem("product");
+    } else if (p === "/brochures" || p === "/documents") {
+      setActiveMenuItem("documents");
+    } else if (p.startsWith("/blogs")) {
+      setActiveMenuItem("articles");
+    } else if (p.startsWith("/gallery")) {
+      setActiveMenuItem("gallery");
+    } else if (p.startsWith("/where-to-buy")) {
+      setActiveMenuItem("where-to-buy");
+    } else if (p.startsWith("/contact-us")) {
+      setActiveMenuItem("contact-us");
+    } else {
+      setActiveMenuItem(null);
+    }
+  }, [pathname]);
+
+  // Fetch products from BE
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const data = await listProducts();
+        setProducts(data || []);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+        setProducts([]);
+      } finally {
+        setLoadingProducts(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Build menu items dynamically
+  const menuItems: MenuItem[] = [
+    {
+      key: "product",
+      label: "Product",
+      children: loadingProducts
+        ? [{ key: "loading", label: "Loading...", href: "#" }]
+        : products.map((product) => ({
+            key: product.slug,
+            label: product.name,
+            href: `/product/${product.slug}`,
+          })),
+    },
+    {
+      key: "documents",
+      label: "Documents",
+      children: [
+        { key: "brochures", label: "Brochures", href: "/brochures" },
+        { key: "documents-msds-tds", label: "MSDS DAN TDS", href: "/documents" },
+      ],
+    },
+    { key: "articles", label: "Articles", href: "/blogs" },
+    { key: "gallery", label: "Gallery", href: "/gallery" },
+    { key: "where-to-buy", label: "Where To Buy", href: "/where-to-buy" },
+    { key: "contact-us", label: "Contact Us", href: "/contact-us" },
+  ];
 
   // Disable body scroll when mobile menu is open
   useEffect(() => {
@@ -135,9 +177,9 @@ const Navbar: React.FC = () => {
                 <div key={item.key} className={styles.desktopMenuItem}>
                   {item.children ? (
                     <div className={styles.desktopMenuDropdown}>
-                      <button className={styles.desktopMenuButton}>
+                      <button className={`${styles.desktopMenuButton} ${activeMenuItem === item.key ? '!border-b-3 !border-secondary' : ''}`}>
                         {item.label}
-                        <DownOutlined className="text-xs ml-1" />
+                        <svg aria-hidden="true" className="w-3 h-3 ml-1" viewBox="0 0 320 512" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"></path></svg>
                       </button>
                       <div className={styles.desktopMenuPanel}>
                         {item.children.map((child) => (
@@ -152,7 +194,7 @@ const Navbar: React.FC = () => {
                       </div>
                     </div>
                   ) : (
-                    <Link href={item.href || "#"} className={styles.desktopMenuButton}>
+                    <Link href={item.href || "#"} className={`${styles.desktopMenuButton} ${activeMenuItem === item.key ? '!border-b-3 !border-secondary' : ''}`} onClick={() => setActiveMenuItem(item.key)}>
                       {item.label}
                     </Link>
                   )}
@@ -172,7 +214,7 @@ const Navbar: React.FC = () => {
               allowClear
               prefix={<SearchOutlined className="text-gray-400" />}
               placeholder="Type to searching"
-              className="hidden lg:block w-full max-w-[420px] rounded-full"
+              className="hidden lg:block w-full max-w-[220px] rounded-full"
             />
 
             {/* Language Switcher - Desktop */}
@@ -244,11 +286,17 @@ const Navbar: React.FC = () => {
                         className="w-full flex items-center justify-between px-6 py-4 text-[#323288] font-semibold uppercase text-sm tracking-wide hover:bg-gray-50 transition-colors"
                       >
                         <span>{item.label}</span>
-                        <DownOutlined
-                          className={`text-xs transition-transform duration-200 ${
+                        <svg
+                          aria-hidden="true"
+                          className={`w-3 h-3 transition-transform duration-200 ${
                             openSubmenu === item.key ? "rotate-180" : ""
                           }`}
-                        />
+                          viewBox="0 0 320 512"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                        >
+                          <path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"></path>
+                        </svg>
                       </button>
                       <div
                         className={`overflow-hidden transition-all duration-300 ease-in-out ${
@@ -272,7 +320,10 @@ const Navbar: React.FC = () => {
                   ) : (
                     <Link
                       href={item.href || "#"}
-                      onClick={toggleMobileMenu}
+                      onClick={() => {
+                        toggleMobileMenu();
+                        setActiveMenuItem(item.key);
+                      }}
                       className="block px-6 py-4 text-[#323288] font-semibold uppercase text-sm tracking-wide hover:bg-gray-50 transition-colors"
                     >
                       {item.label}
