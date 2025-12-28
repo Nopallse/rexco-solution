@@ -137,7 +137,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
               <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">R</span>
               </div>
-              <span className="font-bold text-lg text-gray-900">RYU Admin</span>
+              <span className="font-bold text-lg text-gray-900">Rexco Admin</span>
             </Link>
           ) : (
             <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">

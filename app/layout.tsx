@@ -13,8 +13,8 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: 'RYU Power Tools',
-  description: 'Power Tools Andal untuk Pekerjaan dan Kebutuhan Sehari-hari',
+  title: 'Rexco Solution',
+  description: 'REXCO offers high-performance lubricants, cleaners, and protective solutions for automotive, industrial, and hobbyist needs, including multi-purpose',
 };
 
 const RootLayout = ({ children }: React.PropsWithChildren) => (
