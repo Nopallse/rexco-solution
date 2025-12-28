@@ -7,7 +7,7 @@ export type AuthSession = {
   token: string;
 };
 
-const STORAGE_KEY = "ryu-auth";
+const STORAGE_KEY = "rexco-auth";
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3000";
 
 function isBrowser() {
@@ -22,7 +22,7 @@ export function getStoredAuth(): AuthSession | null {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      console.warn('No ryu-auth found in localStorage');
+      console.warn('No rexco-auth found in localStorage');
       return null;
     }
     const parsed = JSON.parse(raw) as AuthSession;
@@ -59,7 +59,7 @@ export function setStoredAuth(session: AuthSession) {
   
   // Keep a lightweight cookie for simple client-only checks; secure cookie should be set server-side in production.
   try {
-    document.cookie = `ryu_token=${session.token}; path=/; SameSite=Lax`;
+    document.cookie = `rexco_token=${session.token}; path=/; SameSite=Lax`;
     console.log('Cookie set successfully');
   } catch (error) {
     console.error('Error setting cookie:', error);
@@ -69,7 +69,7 @@ export function setStoredAuth(session: AuthSession) {
 export function clearStoredAuth() {
   if (!isBrowser()) return;
   window.localStorage.removeItem(STORAGE_KEY);
-  document.cookie = "ryu_token=; Max-Age=0; path=/; SameSite=Lax";
+  document.cookie = "rexco_token=; Max-Age=0; path=/; SameSite=Lax";
 }
 
 export async function login(email: string, password: string): Promise<AuthSession> {

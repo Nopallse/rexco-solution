@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Row, Col, Statistic, Table, Tag, Space, Button } from 'antd';
 import {
   AppstoreOutlined,
@@ -11,8 +11,14 @@ import {
   ArrowDownOutlined,
   EyeOutlined,
   EditOutlined,
+  PictureOutlined,
 } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
+import { useRouter } from 'next/navigation';
+import { listProducts } from '@/app/lib/product-client';
+import { getPublicArticles } from '@/app/lib/article-api';
+import { listDocuments } from '@/app/lib/document-client';
+import { listGallery } from '@/app/lib/gallery-client';
 
 interface RecentActivity {
   key: string;
@@ -20,32 +26,98 @@ interface RecentActivity {
   title: string;
   status: string;
   date: string;
+  id: string;
+  slug?: string;
 }
 
 const DashboardPage = () => {
-  const recentActivities: RecentActivity[] = [
-    {
-      key: '1',
-      type: 'Product',
-      title: 'Angle Grinder RYU-AG100',
-      status: 'published',
-      date: '2025-12-11',
-    },
-    {
-      key: '2',
-      type: 'Blog',
-      title: 'Tips Memilih Power Tools',
-      status: 'draft',
-      date: '2025-12-10',
-    },
-    {
-      key: '3',
-      type: 'News',
-      title: 'Promo Akhir Tahun 2025',
-      status: 'published',
-      date: '2025-12-09',
-    },
-  ];
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    products: 0,
+    articles: 0,
+    documents: 0,
+    galleries: 0,
+  });
+  const [recentActivities, setRecentActivities] = useState<RecentActivity[]>([]);
+
+  useEffect(() => {
+    async function fetchDashboardData() {
+      try {
+        setLoading(true);
+        
+        // Fetch all data in parallel
+        const [products, articles, documents, galleries] = await Promise.all([
+          listProducts(),
+          getPublicArticles(),
+          listDocuments(),
+          listGallery(),
+        ]);
+
+        // Update stats
+        setStats({
+          products: products.length,
+          articles: articles.length,
+          documents: documents.length,
+          galleries: galleries.length,
+        });
+
+        // Create recent activities from all sources
+        const activities: RecentActivity[] = [];
+
+        // Add recent products (last 3)
+        products.slice(0, 3).forEach((product) => {
+          activities.push({
+            key: `product-${product.id}`,
+            type: 'Product',
+            title: product.name,
+            status: 'published',
+            date: new Date().toISOString().split('T')[0],
+            id: product.id,
+            slug: product.slug,
+          });
+        });
+
+        // Add recent articles (last 3)
+        articles.slice(0, 3).forEach((article) => {
+          activities.push({
+            key: `article-${article.id}`,
+            type: 'Article',
+            title: article.title,
+            status: article.publishedAt ? 'published' : 'draft',
+            date: article.publishedAt 
+              ? new Date(article.publishedAt).toISOString().split('T')[0]
+              : new Date(article.createdAt || '').toISOString().split('T')[0],
+            id: article.id,
+            slug: article.slug,
+          });
+        });
+
+        // Add recent documents (last 2)
+        documents.slice(0, 2).forEach((doc) => {
+          activities.push({
+            key: `document-${doc.id}`,
+            type: 'Document',
+            title: doc.title,
+            status: 'published',
+            date: new Date().toISOString().split('T')[0],
+            id: doc.id,
+          });
+        });
+
+        // Sort by date and take top 5
+        activities.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        setRecentActivities(activities.slice(0, 5));
+
+      } catch (error) {
+        console.error('Failed to fetch dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchDashboardData();
+  }, []);
 
   const columns: ColumnsType<RecentActivity> = [
     {
@@ -53,7 +125,11 @@ const DashboardPage = () => {
       dataIndex: 'type',
       key: 'type',
       render: (type: string) => (
-        <Tag color={type === 'Product' ? 'blue' : type === 'Blog' ? 'green' : 'orange'}>
+        <Tag color={
+          type === 'Product' ? 'blue' : 
+          type === 'Article' ? 'green' : 
+          type === 'Document' ? 'orange' : 'purple'
+        }>
           {type}
         </Tag>
       ),
@@ -62,6 +138,7 @@ const DashboardPage = () => {
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
+      ellipsis: true,
     },
     {
       title: 'Status',
@@ -81,14 +158,36 @@ const DashboardPage = () => {
     {
       title: 'Action',
       key: 'action',
-      render: () => (
+      render: (_, record) => (
         <Space size="small">
-          <Button type="text" icon={<EyeOutlined />} size="small" />
-          <Button type="text" icon={<EditOutlined />} size="small" />
+          <Button 
+            type="text" 
+            icon={<EyeOutlined />} 
+            size="small"
+            onClick={() => handleView(record)}
+          />
         </Space>
       ),
     },
   ];
+
+  const handleView = (record: RecentActivity) => {
+    if (record.type === 'Product' && record.slug) {
+      router.push(`/product/${record.slug}`);
+    } else if (record.type === 'Article' && record.slug) {
+      router.push(`/blog/${record.slug}`);
+    }
+  };
+
+  const handleEdit = (record: RecentActivity) => {
+    if (record.type === 'Product') {
+      router.push(`/admin/products/edit/${record.id}`);
+    } else if (record.type === 'Article') {
+      router.push(`/admin/articles/edit/${record.id}`);
+    } else if (record.type === 'Document') {
+      router.push(`/admin/documents`);
+    }
+  };
 
   return (
     <div>
@@ -102,14 +201,10 @@ const DashboardPage = () => {
           <Card bordered={false} className="shadow-sm hover:shadow-md transition-shadow">
             <Statistic
               title={<span className="text-gray-600 font-medium">Total Products</span>}
-              value={156}
+              value={stats.products}
               prefix={<AppstoreOutlined className="text-blue-600" />}
               valueStyle={{ color: '#1890ff', fontSize: '28px', fontWeight: 600 }}
-              suffix={
-                <span className="text-sm text-green-600 flex items-center gap-1">
-                  <ArrowUpOutlined /> 12%
-                </span>
-              }
+              loading={loading}
             />
           </Card>
         </Col>
@@ -117,15 +212,11 @@ const DashboardPage = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card bordered={false} className="shadow-sm hover:shadow-md transition-shadow">
             <Statistic
-              title={<span className="text-gray-600 font-medium">Blog Posts</span>}
-              value={43}
+              title={<span className="text-gray-600 font-medium">Articles</span>}
+              value={stats.articles}
               prefix={<BookOutlined className="text-green-600" />}
               valueStyle={{ color: '#52c41a', fontSize: '28px', fontWeight: 600 }}
-              suffix={
-                <span className="text-sm text-green-600 flex items-center gap-1">
-                  <ArrowUpOutlined /> 8%
-                </span>
-              }
+              loading={loading}
             />
           </Card>
         </Col>
@@ -133,15 +224,11 @@ const DashboardPage = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card bordered={false} className="shadow-sm hover:shadow-md transition-shadow">
             <Statistic
-              title={<span className="text-gray-600 font-medium">News Articles</span>}
-              value={28}
+              title={<span className="text-gray-600 font-medium">Documents</span>}
+              value={stats.documents}
               prefix={<FileTextOutlined className="text-orange-600" />}
               valueStyle={{ color: '#fa8c16', fontSize: '28px', fontWeight: 600 }}
-              suffix={
-                <span className="text-sm text-red-600 flex items-center gap-1">
-                  <ArrowDownOutlined /> 3%
-                </span>
-              }
+              loading={loading}
             />
           </Card>
         </Col>
@@ -149,17 +236,18 @@ const DashboardPage = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card bordered={false} className="shadow-sm hover:shadow-md transition-shadow">
             <Statistic
-              title={<span className="text-gray-600 font-medium">Service Centers</span>}
-              value={12}
-              prefix={<ShopOutlined className="text-purple-600" />}
+              title={<span className="text-gray-600 font-medium">Gallery Images</span>}
+              value={stats.galleries}
+              prefix={<PictureOutlined className="text-purple-600" />}
               valueStyle={{ color: '#722ed1', fontSize: '28px', fontWeight: 600 }}
+              loading={loading}
             />
           </Card>
         </Col>
       </Row>
 
       <Row gutter={[16, 16]}>
-        <Col xs={24} lg={16}>
+        <Col>
           <Card
             title={<span className="font-semibold text-gray-900">Recent Activities</span>}
             bordered={false}
@@ -170,56 +258,8 @@ const DashboardPage = () => {
               dataSource={recentActivities}
               pagination={false}
               size="small"
+              loading={loading}
             />
-          </Card>
-        </Col>
-
-        <Col xs={24} lg={8}>
-          <Card
-            title={<span className="font-semibold text-gray-900">Quick Actions</span>}
-            bordered={false}
-            className="shadow-sm"
-          >
-            <Space direction="vertical" className="w-full" size="middle">
-              <Button type="primary" block size="large" className="bg-green-600 hover:bg-green-700">
-                Add New Product
-              </Button>
-              <Button block size="large">
-                Create Blog Post
-              </Button>
-              <Button block size="large">
-                Add News Article
-              </Button>
-              <Button block size="large">
-                Manage Categories
-              </Button>
-            </Space>
-          </Card>
-
-          <Card
-            title={<span className="font-semibold text-gray-900">System Status</span>}
-            bordered={false}
-            className="shadow-sm mt-4"
-          >
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Storage Used</span>
-                <span className="font-semibold text-gray-900">2.3 GB / 10 GB</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-green-600 h-2 rounded-full" style={{ width: '23%' }}></div>
-              </div>
-              
-              <div className="flex justify-between items-center pt-2">
-                <span className="text-gray-600">Database</span>
-                <Tag color="success">Connected</Tag>
-              </div>
-              
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Last Backup</span>
-                <span className="text-sm text-gray-500">2 hours ago</span>
-              </div>
-            </div>
           </Card>
         </Col>
       </Row>

@@ -68,7 +68,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     {
       key: '/admin/brochures',
       icon: <FilePdfOutlined />,
-      label: <Link href="/admin/brochures">brochures</Link>,
+      label: <Link href="/admin/brochures">Brochures</Link>,
     },
     {
       key: 'gallery',
@@ -87,27 +87,9 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
         },
       ],
     },
-    {
-      key: '/admin/service-centers',
-      icon: <ShopOutlined />,
-      label: <Link href="/admin/service-centers">Service Centers</Link>,
-    },
   ];
 
   const userMenuItems: MenuProps['items'] = [
-    {
-      key: 'profile',
-      icon: <UserOutlined />,
-      label: 'Profile',
-    },
-    {
-      key: 'settings',
-      icon: <SettingOutlined />,
-      label: 'Settings',
-    },
-    {
-      type: 'divider',
-    },
     {
       key: 'logout',
       icon: <LogoutOutlined />,

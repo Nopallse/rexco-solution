@@ -60,7 +60,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onMenuClick }) => {
       collapsedWidth={80}
     >
       <div className={styles.logoContainer}>
-        <div className={styles.logo}>{collapsed ? 'RP' : 'Ryu Power'}</div>
+        <div className={styles.logo}>{collapsed ? 'RP' : 'rexco Power'}</div>
       </div>
 
       <Menu

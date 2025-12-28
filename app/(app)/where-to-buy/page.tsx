@@ -35,17 +35,17 @@ const countries: Country[] = [
 const marketplaces: Marketplace[] = [
   {
     name: "Tokopedia",
-    url: "https://www.tokopedia.com/ryuofficial",
+    url: "https://www.tokopedia.com/rexcoofficial",
     logo: "/images/icon/tokopedia.png",
   },
   {
     name: "Shopee",
-    url: "https://shopee.co.id/ryuofficial",
+    url: "https://shopee.co.id/rexcoofficial",
     logo: "/images/icon/shopee.png",
   },
   {
     name: "TikTok Shop",
-    url: "https://www.tiktok.com/shop/ryu-official-store-official",
+    url: "https://www.tiktok.com/shop/rexco-official-store-official",
     logo: "/images/icon/tiktok_shop.png",
   },
   {
@@ -55,7 +55,7 @@ const marketplaces: Marketplace[] = [
   },
   {
     name: "Monotaro",
-    url: "https://www.monotaro.id/shopbybrand/brand?brand=ryu",
+    url: "https://www.monotaro.id/shopbybrand/brand?brand=rexco",
     logo: "/images/icon/monotaro.jpg",
   },
 

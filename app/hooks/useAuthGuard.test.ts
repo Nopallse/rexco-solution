@@ -2,8 +2,8 @@
 // Run this in the browser console to see what's stored
 
 export function testAuthStorage() {
-  const raw = window.localStorage.getItem('ryu-auth');
-  console.log('Raw localStorage ryu-auth:', raw);
+  const raw = window.localStorage.getItem('rexco-auth');
+  console.log('Raw localStorage rexco-auth:', raw);
   
   if (raw) {
     try {
@@ -16,7 +16,7 @@ export function testAuthStorage() {
       console.error('Failed to parse:', e);
     }
   } else {
-    console.log('No ryu-auth found in localStorage');
+    console.log('No rexco-auth found in localStorage');
     console.log('All localStorage keys:', Object.keys(window.localStorage));
   }
 }
