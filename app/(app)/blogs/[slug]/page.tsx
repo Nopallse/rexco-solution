@@ -6,8 +6,10 @@ import { useParams } from 'next/navigation';
 import { ClockCircleOutlined } from '@ant-design/icons';
 import { getPublicArticleBySlug, Article } from '@/app/lib/article-api';
 import { getImageUrl } from '@/app/lib/image-utils';
+import { useLanguage } from '@/app/providers/LanguageProvider';
 
   export default function BlogDetailPage() {
+    const { t } = useLanguage();
     const params = useParams();
     const slug = params.slug as string;
     const [article, setArticle] = useState<Article | null>(null);
@@ -22,7 +24,7 @@ import { getImageUrl } from '@/app/lib/image-utils';
           setArticle(data);
           setError(null);
         } catch (e) {
-          setError("Artikel tidak ditemukan");
+          setError(t.pages?.blogs?.notfound || "Artikel tidak ditemukan");
           setArticle(null);
         } finally {
           setLoading(false);
@@ -35,7 +37,7 @@ import { getImageUrl } from '@/app/lib/image-utils';
       return (
         <div className="bg-white py-20">
           <div className="container mx-auto max-w-screen-xl px-8 sm:px-12 lg:px-16 text-center">
-            <p className="text-gray-600">Memuat artikel...</p>
+            <p className="text-gray-600">{t.pages?.blogs?.loading || 'Memuat artikel...'}</p>
           </div>
         </div>
       );
@@ -45,9 +47,9 @@ import { getImageUrl } from '@/app/lib/image-utils';
       return (
         <div className="bg-white py-20">
           <div className="container mx-auto max-w-screen-xl px-8 sm:px-12 lg:px-16 text-center">
-            <h1 className="text-3xl font-bold text-gray-800 mb-4">{error || "Artikel Tidak Ditemukan"}</h1>
+            <h1 className="text-3xl font-bold text-gray-800 mb-4">{error || (t.pages?.blogs?.notfound || "Artikel Tidak Ditemukan")}</h1>
             <Link href="/blogs" className="text-[#2d5016] hover:underline">
-              ← Kembali ke Blog
+              {t.pages?.blogs?.back || '← Kembali ke Blog'}
             </Link>
           </div>
         </div>

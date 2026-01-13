@@ -3,8 +3,10 @@
 import React from "react";
 import { Button } from "antd";
 import Link from "next/link";
+import { useLanguage } from '@/app/providers/LanguageProvider';
 
 export default function FeaturedProductSection() {
+  const { t } = useLanguage();
   const productImages = [
     "/images/hero/1.webp",
     "/images/hero/2.webp",
@@ -39,23 +41,21 @@ export default function FeaturedProductSection() {
             <div className="bg-white p-6 flex flex-col justify-center border-t-10 border-secondary">
               {/* Title - Centered */}
               <h2 className=" lg:text-md font-bold text-primary text-center mb-8 leading-tight uppercase">
-                REXCO 50 PERLINDUNGAN OPTIMAL, PELUMAS MULTI FUNGSI
+                {t.home?.featured?.title || 'REXCO 50 PERLINDUNGAN OPTIMAL, PELUMAS MULTI FUNGSI'}
               </h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 {/* Left Section - Product Info */}
                 <div>
                   <p className="text-black text-lg leading-relaxed mb-8">
-                    Rexco 50 adalah pelumas serbaguna yang menawarkan penetrasi
-                    dua kali lebih cepat dan perlindungan anti-karat hingga tiga
-                    kali.
+                    {t.home?.featured?.desc || 'Rexco 50 adalah pelumas serbaguna yang menawarkan penetrasi dua kali lebih cepat dan perlindungan anti-karat hingga tiga kali.'}
                   </p>
                   <Button
                     type="primary"
                     size="large"
                     className="!bg-[#323288] hover:!bg-[#2d1e4e] !border-none !px-8 !h-auto !py-3 !text-base font-bold tracking-wider w-full"
                   >
-                    PELAJARI LEBIH LANJUT
+                    {t.home?.featured?.learn_more || 'PELAJARI LEBIH LANJUT'}
                   </Button>
                 </div>
 
@@ -79,7 +79,9 @@ export default function FeaturedProductSection() {
 
             {/* Right Section - Related Products */}
             <div className="space-y-6 py-8">
-              
+              <h3 className="text-white text-xl font-bold uppercase mb-4">
+                {t.home?.featured?.related_title || 'Related Products'}
+              </h3>
               {relatedProducts.map((product, index) => (
                 <div key={index} className="flex gap-4 items-start">
                   <div className="flex-shrink-0 w-20 h-20 bg-gray-400 overflow-hidden">
@@ -95,9 +97,9 @@ export default function FeaturedProductSection() {
                     </p>
                     <Link
                       href={product.link}
-                      className="text-white text-sm font-extrabold uppercase tracking-wider hover:text-gray-200 inline-flex items-center gap-2"
+                      className="!text-white text-sm font-extrabold uppercase tracking-wider hover:!text-black inline-flex items-center gap-2"
                     >
-                      BACA LEBIH LANJUT
+                      {t.home?.featured?.read_more || 'BACA LEBIH LANJUT'}
                       <span>→</span>
                     </Link>
                   </div>

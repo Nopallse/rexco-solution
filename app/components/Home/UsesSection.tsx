@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import { useLanguage } from '@/app/providers/LanguageProvider';
 
 type VideoItem = {
   id: number;
@@ -84,6 +85,7 @@ const videos: VideoItem[] = [
 ];
 
 export default function UsesSection() {
+  const { t } = useLanguage();
   const [activeId, setActiveId] = useState<number>(videos[0].id);
 
   const activeVideo = useMemo(
@@ -101,7 +103,7 @@ export default function UsesSection() {
       <div className="container mx-auto max-w-screen-xl px-6 sm:px-10 lg:px-16">
         <div className="mb-10 sm:mb-14">
           <h2 className="text-3xl lg:text-4xl font-bold text-primary mb-4 decoration-2 underline-offset-4">
-            3000++ USES OF REXCO
+            {t.home?.uses?.title || '3000++ USES OF REXCO'}
           </h2>
           <hr className="mb-8" />
 

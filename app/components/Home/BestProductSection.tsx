@@ -5,8 +5,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { listBestSellerProducts, ProductDto } from "@/app/lib/product-client";
 import { getImageUrl } from "@/app/lib/image-utils";
+import { useLanguage } from '@/app/providers/LanguageProvider';
 
 export default function BestProductSection() {
+  const { t } = useLanguage();
   const [products, setProducts] = useState<ProductDto[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -43,7 +45,7 @@ export default function BestProductSection() {
       <div className="container mx-auto max-w-screen-xl px-8 sm:px-12 lg:px-16">
         <div className="mb-16">
           <h2 className="text-3xl lg:text-4xl font-bold text-primary mb-4  decoration-2 underline-offset-4">
-            REXCO'S BEST PRODUCTS
+            {t.home?.best?.title || "REXCO'S BEST PRODUCTS"}
           </h2>
           <hr className="mb-8" />
         </div>

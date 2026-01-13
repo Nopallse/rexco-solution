@@ -2,8 +2,10 @@
 
 import React from 'react';
 import { Carousel } from 'antd';
+import { useLanguage } from '@/app/providers/LanguageProvider';
 
 export default function HeroSection() {
+  const { t } = useLanguage();
   const bannerImages = [
     '/images/banner/1.jpg',
     '/images/banner/2.jpg',
@@ -19,13 +21,13 @@ export default function HeroSection() {
         className="w-full"
       >
         {bannerImages.map((image, index) => (
-          <div key={index} className="w-full h-48 sm:h-80 lg:h-96">
+            <div key={index} className="w-full h-96 sm:h-[500px] lg:h-[600px]">
             <img
               src={image}
-              alt={`Banner ${index + 1}`}
+              alt={`${t.home?.hero?.alt || 'Banner'} ${index + 1}`}
               className="w-full h-full object-cover"
             />
-          </div>
+            </div>
         ))}
       </Carousel>
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "antd";
+import { useLanguage } from '@/app/providers/LanguageProvider';
 
 const tips = [
   {
@@ -24,14 +25,15 @@ const tips = [
 ];
 
 export default function TipsSection() {
+  const { t } = useLanguage();
   return (
     <div className="bg-white py-20">
       <div className="container mx-auto max-w-screen-xl px-8 sm:px-12 lg:px-16">
         <div className="mb-16">
           <h2 className="text-center sm:text-left text-3xl lg:text-4xl font-bold text-primary mb-4  decoration-2 underline-offset-4">
-            TIPS FOR MAINTAINING AND CARE USING REXCO
+            {t.home?.tips?.title || 'TIPS FOR MAINTAINING AND CARE USING REXCO'}
           </h2>
-                    <hr className="mb-8" />
+          <hr className="mb-8" />
 
         </div>
 
@@ -48,10 +50,10 @@ export default function TipsSection() {
               />
 
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-primary mb-3 px-4 sm:px-6 md:px-8 mt-4">
-              {tips.title}
+              {tips.title === 'AUTOMOTIVE' ? (t.home?.tips?.automotive || tips.title) : tips.title === 'INDUSTRIAL' ? (t.home?.tips?.industrial || tips.title) : tips.title === 'HOBBY' ? (t.home?.tips?.hobby || tips.title) : tips.title}
               </h3>
               <p className="text-xs sm:text-sm md:text-base font-semibold px-4 sm:px-6 md:px-8 mt-4 mb-8">
-              {tips.description}
+              {tips.title === 'AUTOMOTIVE' ? (t.home?.tips?.automotive_desc || tips.description) : tips.title === 'INDUSTRIAL' ? (t.home?.tips?.industrial_desc || tips.description) : tips.title === 'HOBBY' ? (t.home?.tips?.hobby_desc || tips.description) : tips.description}
               </p>
             </div>
           ))}

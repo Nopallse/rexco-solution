@@ -1,0 +1,105 @@
+// empty
+const id = {
+	nav: {
+		product: "Produk",
+		documents: "Dokumen",
+		brochures: "Brosur",
+		msds_tds: "MSDS & TDS",
+		articles: "Artikel",
+		gallery: "Galeri",
+		where_to_buy: "Tempat Pembelian",
+		contact_us: "Kontak Kami",
+		loading: "Memuat...",
+		search_placeholder: "Ketik untuk mencari",
+		language: "Bahasa",
+	},
+	home: {
+		hero: {
+			alt: "Banner",
+		},
+		featured: {
+			title: "REXCO 50 PERLINDUNGAN OPTIMAL, PELUMAS MULTI FUNGSI",
+			desc: "Rexco 50 adalah pelumas serbaguna yang menawarkan penetrasi dua kali lebih cepat dan perlindungan anti-karat hingga tiga kali.",
+			learn_more: "PELAJARI LEBIH LANJUT",
+			related_title: "Produk Terkait",
+			read_more: "BACA LEBIH LANJUT",
+		},
+		best: {
+			title: "Produk Terlaris",
+		},
+		protect: {
+			title: "LINDUNGI MESIN DARI KARAT",
+			desc: "Rexco 50 Multipurpose Lubricant dirancang untuk berbagai aplikasi, melindungi logam dari karat dan korosi. Dengan penetrasi cepat, produk ini mudah melonggarkan mur dan baut yang berkarat.",
+			learn_more: "PELAJARI LEBIH LANJUT",
+		},
+		tips: {
+			title: "TIPS PERAWATAN DAN PEMELIHARAAN DENGAN REXCO",
+			automotive: "OTOMOTIF",
+			automotive_desc: "Maksimalkan efisiensi rantai Anda dengan Pelumas Rantai Performa Tinggi kami. Dirancang untuk melumasi dan mengurangi keausan, produk ini memperpanjang umur rantai dan sproket sambil mempertahankan kinerja optimal pada beban dan suhu tinggi. Formula canggih ini menawarkan viskositas 2x lebih tinggi, pelumasan 3x lebih efektif, dan ketahanan debu 2x lebih baik.",
+			industrial: "INDUSTRI",
+			industrial_desc: "REXCO 70 Multi-Purpose Degreaser adalah solusi pembersih penting untuk sektor otomotif dan industri. Dirancang untuk menghilangkan minyak, kotoran, dan lemak secara efektif dari mesin sepeda motor dan mobil, serta peralatan dan mesin industri. Pembersih serbaguna ini memastikan kinerja optimal dengan menghilangkan penumpukan yang dapat menghambat operasi.",
+			hobby: "HOBI",
+			hobby_desc: "REXCO 70 Multi-Purpose Degreaser adalah solusi pembersih yang sangat berharga bagi para penghobi yang menikmati proyek-proyek, baik merestorasi mobil klasik, merawat sepeda motor, atau bahkan mengerjakan alat dan peralatan di rumah. Pembersih serbaguna ini secara efektif menghilangkan penumpukan minyak, kotoran, dan lemak, memastikan alat dan permukaan Anda tetap dalam kondisi prima.",
+		},
+		uses: {
+			title: "Cara Menggunakan REXCO",
+		},
+	},
+	pages: {
+		blogs: {
+			title: "Artikel",
+			loading: "Memuat artikel...",
+			error: "Gagal memuat artikel",
+			back: "← Kembali ke Blog",
+			notfound: "Artikel Tidak Ditemukan",
+			article_label: "Artikel",
+		},
+		brochures: {
+			title: "Brosur",
+			subtitle: "Unduh katalog dan brosur produk REXCO",
+			loading: "Memuat brosur...",
+			error: "Gagal memuat data brosur",
+			download: "Unduh",
+			retry: "Coba Lagi",
+			no_data: "Belum ada brosur tersedia",
+		},
+		documents: {
+			title: "Dokumen (MSDS dan TDS)",
+			loading: "Memuat dokumen...",
+			no_data: "Belum ada dokumen tersedia.",
+		},
+		contact: {
+			title: "Hubungi Kami",
+			name: "Nama",
+			email: "E-mail",
+			phone: "Telepon",
+			subject: "Subjek",
+			message: "Pesan",
+			send: "KIRIM",
+			info_title: "Informasi Kontak",
+			whatsapp: "Whatsapp",
+			success_message: "Terima kasih! Kami akan menghubungi Anda segera.",
+		},
+		gallery: {
+			title: "Galeri",
+			loading: "Memuat galeri...",
+			instagram: "Instagram",
+			web_gallery: "Galeri Web",
+			visit_instagram: "KUNJUNGI INSTAGRAM KAMI",
+		},
+		where_to_buy: {
+			title: "TEMPAT PEMBELIAN",
+			store_info_title: "Tersedia di toko teknik terdekat Anda:",
+			building_materials: "Toko Bahan Bangunan",
+			engineering_tool: "Toko Alat Teknik,",
+			automotive: "Bengkel Otomotif,",
+			electronics: "Toko Elektronik",
+			tool_center: "Pusat Bisnis Alat (ITC Glodok, Pasar Kenari)",
+			online_store_title: "TOKO ONLINE RESMI",
+			available_at: "Kami tersedia di",
+			modern_market_title: "PASAR MODERN",
+		},
+	},
+};
+
+export default id;

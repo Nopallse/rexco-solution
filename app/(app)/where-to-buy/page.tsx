@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useLanguage } from '@/app/providers/LanguageProvider';
 
 type Marketplace = {
   name: string;
@@ -95,6 +96,7 @@ const modernMarkets: Marketplace[] = [
 ];
 
 const WhereToBuyPage = () => {
+  const { t } = useLanguage();
   const [selectedCountry, setSelectedCountry] = useState<string>("indonesia");
 
   return (
@@ -102,7 +104,7 @@ const WhereToBuyPage = () => {
       <div className="container mx-auto max-w-screen-xl px-4 sm:px-8 lg:px-16">
         {/* Page Title */}
         <h1 className="text-3xl sm:text-4xl font-bold text-primary text-left mb-8">
-          WHERE TO BUY
+          {t.pages?.where_to_buy?.title || 'WHERE TO BUY'}
         </h1>
 
         {/* Main Content Section */}
@@ -137,14 +139,14 @@ const WhereToBuyPage = () => {
             {/* Store Information */}
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-primary mb-4">
-                Available at your nearest engineering store:
+                {t.pages?.where_to_buy?.store_info_title || 'Available at your nearest engineering store:'}
               </h2>
               <ul className="text-base sm:text-lg text-gray-700 space-y-2">
-                <li>Building Materials Store</li>
-                <li>Engineering Tool Store,</li>
-                <li>Automotive Workshop,</li>
-                <li>Electronics Store</li>
-                <li>Tool Business Center (ITC Glodok, Kenari Market)</li>
+                <li>{t.pages?.where_to_buy?.building_materials || 'Building Materials Store'}</li>
+                <li>{t.pages?.where_to_buy?.engineering_tool || 'Engineering Tool Store,'}</li>
+                <li>{t.pages?.where_to_buy?.automotive || 'Automotive Workshop,'}</li>
+                <li>{t.pages?.where_to_buy?.electronics || 'Electronics Store'}</li>
+                <li>{t.pages?.where_to_buy?.tool_center || 'Tool Business Center (ITC Glodok, Kenari Market)'}</li>
               </ul>
             </div>
           </div>
@@ -154,9 +156,9 @@ const WhereToBuyPage = () => {
             {/* Online Stores Section */}
             <div>
               <h2 className="text-2xl sm:text-3xl font-bold text-primary mb-2">
-                OFFICIAL ONLINE STORE
+                {t.pages?.where_to_buy?.online_store_title || 'OFFICIAL ONLINE STORE'}
               </h2>
-              <p className="text-lg text-primary mb-6">We are available at</p>
+              <p className="text-lg text-primary mb-6">{t.pages?.where_to_buy?.available_at || 'We are available at'}</p>
 
               <div className="grid grid-cols-4 gap-4">
                 {marketplaces.map((item, idx) => (
@@ -201,7 +203,7 @@ const WhereToBuyPage = () => {
             {/* Modern Market Section */}
             <div>
               <h2 className="text-2xl sm:text-3xl font-bold text-primary mb-6">
-              MODERN MARKET
+              {t.pages?.where_to_buy?.modern_market_title || 'MODERN MARKET'}
               </h2>
 
               <div className="grid grid-cols-3 gap-4">

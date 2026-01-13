@@ -1,4 +1,5 @@
 import React from 'react';
+import LanguageProvider from './providers/LanguageProvider';
 import { Montserrat } from 'next/font/google';
 import { App as AntdApp, ConfigProvider } from 'antd';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
@@ -20,13 +21,15 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: React.PropsWithChildren) => (
   <html lang="en" className={`${montserrat.variable}`} suppressHydrationWarning>
     <body suppressHydrationWarning>
-      <AntdRegistry>
-        <ConfigProvider theme={theme}>
-          <AntdApp>
-            {children}
-          </AntdApp>
-        </ConfigProvider>
-      </AntdRegistry>
+      <LanguageProvider>
+        <AntdRegistry>
+          <ConfigProvider theme={theme}>
+            <AntdApp>
+              {children}
+            </AntdApp>
+          </ConfigProvider>
+        </AntdRegistry>
+      </LanguageProvider>
     </body>
   </html>
 );

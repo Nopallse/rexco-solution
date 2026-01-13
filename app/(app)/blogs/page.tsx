@@ -5,8 +5,10 @@ import Link from "next/link";
 import { getPublicArticles } from "@/app/lib/article-api";
 import { getImageUrl } from "@/app/lib/image-utils";
 import type { Article } from "@/app/lib/article-api";
+import { useLanguage } from '@/app/providers/LanguageProvider';
 
 export default function BlogPage() {
+  const { t } = useLanguage();
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -18,7 +20,7 @@ export default function BlogPage() {
         setArticles(data);
       } catch (err) {
         console.error("Failed to fetch articles:", err);
-        setError("Gagal memuat artikel");
+        setError(t.pages?.blogs?.error || "Gagal memuat artikel");
       } finally {
         setLoading(false);
       }
@@ -31,7 +33,7 @@ export default function BlogPage() {
     return (
       <div className="bg-white py-20">
         <div className="container mx-auto max-w-screen-xl px-8 sm:px-12 lg:px-16">
-          <div className="text-center text-gray-500">Memuat artikel...</div>
+          <div className="text-center text-gray-500">{t.pages?.blogs?.loading || 'Memuat artikel...'}</div>
         </div>
       </div>
     );
@@ -52,7 +54,7 @@ export default function BlogPage() {
       <div className="container mx-auto max-w-screen-xl px-8 sm:px-12 lg:px-16">
         <div className="mb-16">
           <h2 className="text-5xl lg:text-6xl font-bold text-primary mb-4  decoration-2 underline-offset-4">
-            Artikel
+            {t.pages?.blogs?.title || 'Artikel'}
           </h2>
         </div>
 
@@ -81,7 +83,7 @@ export default function BlogPage() {
                 </svg>
 
                 <span className=" text-lg font-semibold text-[#717171]">
-                  Article
+                  {t.pages?.blogs?.article_label || 'Article'}
                 </span>
               </div>
 

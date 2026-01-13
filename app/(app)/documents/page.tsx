@@ -4,8 +4,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { listProducts, type ProductDto } from "@/app/lib/product-client";
 import { getImageUrl, getFileUrl } from "@/app/lib/image-utils";
+import { useLanguage } from '@/app/providers/LanguageProvider';
 
 export default function DocumentsPage() {
+  const { t } = useLanguage();
   const [products, setProducts] = useState<ProductDto[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +37,7 @@ export default function DocumentsPage() {
     return (
       <div className="bg-white py-8 sm:py-12 lg:py-20">
         <div className="container mx-auto max-w-screen-xl px-8 sm:px-12 lg:px-16">
-          <div className="text-primary">Memuat dokumen…</div>
+          <div className="text-primary">{t.pages?.documents?.loading || 'Memuat dokumen…'}</div>
         </div>
       </div>
     );
@@ -47,10 +49,10 @@ export default function DocumentsPage() {
         <div className="container mx-auto max-w-screen-xl px-8 sm:px-12 lg:px-16">
           <div className="mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-primary mb-4 decoration-2 underline-offset-4">
-              Dokumen (MSDS dan TDS)
+              {t.pages?.documents?.title || 'Dokumen (MSDS dan TDS)'}
             </h2>
           </div>
-          <p className="text-gray-600">Belum ada dokumen tersedia.</p>
+          <p className="text-gray-600">{t.pages?.documents?.no_data || 'Belum ada dokumen tersedia.'}</p>
         </div>
       </div>
     );
@@ -61,7 +63,7 @@ export default function DocumentsPage() {
       <div className="container mx-auto max-w-screen-xl px-8 sm:px-12 lg:px-16">
         <div className="mb-8 sm:mb-12">
           <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-primary mb-4 decoration-2 underline-offset-4">
-            Dokumen (MSDS dan TDS)
+            {t.pages?.documents?.title || 'Dokumen (MSDS dan TDS)'}
           </h2>
         </div>
 

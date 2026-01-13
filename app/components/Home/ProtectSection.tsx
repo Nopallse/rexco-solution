@@ -2,8 +2,10 @@
 
 import React, { useEffect } from "react";
 import { Button } from "antd";
+import { useLanguage } from '@/app/providers/LanguageProvider';
 
 export default function ProtectSection() {
+  const { t } = useLanguage();
   useEffect(() => {
     // Dynamically import and register the image-compare web component
     const loadImageCompare = () => {
@@ -25,13 +27,10 @@ export default function ProtectSection() {
             <div className="flex flex-col justify-center">
               {/* Title - Centered */}
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-4 sm:mb-6 lg:mb-8 leading-tight uppercase">
-                PROTECT YOUR ENGINE FROM RUST
+                {t.home?.protect?.title || 'PROTECT YOUR ENGINE FROM RUST'}
               </h2>
               <p className="text-[#f0f2fb] font-semibold text-sm sm:text-base lg:text-lg leading-relaxed mb-6 lg:mb-8">
-                Rexco 50 Multipurpose Lubricant is designed for a wide range of
-                applications, protecting metal from rust and corrosion. With its
-                fast penetration, this product easily loosens rusted nuts and
-                bolts.
+                {t.home?.protect?.desc || 'Rexco 50 Multipurpose Lubricant is designed for a wide range of applications, protecting metal from rust and corrosion. With its fast penetration, this product easily loosens rusted nuts and bolts.'}
               </p>
               <Button
                 type="primary"

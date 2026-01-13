@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import { useLanguage } from '@/app/providers/LanguageProvider';
 
 const ContactPage = () => {
+  const { t } = useLanguage();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -22,7 +24,7 @@ const ContactPage = () => {
     e.preventDefault();
     // TODO: integrate with backend/email service
     console.log("Contact form:", form);
-    alert("Thank you! We will contact you soon.");
+    alert(t.pages?.contact?.success_message || "Thank you! We will contact you soon.");
   };
 
   return (
@@ -32,7 +34,7 @@ const ContactPage = () => {
           {/* Left: Form */}
           <div>
             <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-primary mb-4 sm:mb-6 lg:mb-8">
-              Get In Touch
+              {t.pages?.contact?.title || 'Get In Touch'}
             </h1>
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
               {/* Two-column rows */}
@@ -40,7 +42,7 @@ const ContactPage = () => {
                 <input
                   type="text"
                   name="name"
-                  placeholder="Name"
+                  placeholder={t.pages?.contact?.name || "Name"}
                   value={form.name}
                   onChange={handleChange}
                   className="w-full rounded-md bg-[#eef1fa] px-4 py-3 sm:py-4 text-gray-800 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary"
@@ -49,7 +51,7 @@ const ContactPage = () => {
                 <input
                   type="email"
                   name="email"
-                  placeholder="E-mail"
+                  placeholder={t.pages?.contact?.email || "E-mail"}
                   value={form.email}
                   onChange={handleChange}
                   className="w-full rounded-md bg-[#eef1fa] px-4 py-3 sm:py-4 text-gray-800 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary"
@@ -61,7 +63,7 @@ const ContactPage = () => {
                 <input
                   type="tel"
                   name="phone"
-                  placeholder="Phone"
+                  placeholder={t.pages?.contact?.phone || "Phone"}
                   value={form.phone}
                   onChange={handleChange}
                   className="w-full rounded-md bg-[#eef1fa] px-4 py-3 sm:py-4 text-gray-800 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary"
@@ -70,7 +72,7 @@ const ContactPage = () => {
                 <input
                   type="text"
                   name="subject"
-                  placeholder="Subject"
+                  placeholder={t.pages?.contact?.subject || "Subject"}
                   value={form.subject}
                   onChange={handleChange}
                   className="w-full rounded-md bg-[#eef1fa] px-4 py-3 sm:py-4 text-gray-800 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary"
@@ -79,7 +81,7 @@ const ContactPage = () => {
 
               <textarea
                 name="message"
-                placeholder="Message"
+                placeholder={t.pages?.contact?.message || "Message"}
                 value={form.message}
                 onChange={handleChange}
                 className="w-full rounded-md bg-[#eef1fa] px-4 py-3 sm:py-4 text-gray-800 h-32 sm:h-40 resize-none text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary"
@@ -90,7 +92,7 @@ const ContactPage = () => {
                 type="submit"
                 className="mt-2 w-full cursor-pointer bg-secondary text-primary font-bold tracking-wide px-6 sm:px-8 lg:px-10 py-4 sm:py-5 text-sm sm:text-base rounded-md hover:bg-primary hover:text-secondary transition-colors"
               >
-                SEND
+                {t.pages?.contact?.send || 'SEND'}
                 <svg aria-hidden="true" className="inline-block ml-2 w-4 h-4" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z"></path></svg>
               </button>
             </form>
@@ -99,7 +101,7 @@ const ContactPage = () => {
           {/* Right: Contact Information */}
             <div className="flex flex-col h-full">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6">
-              Contact Information
+              {t.pages?.contact?.info_title || 'Contact Information'}
             </h2>
             <div className="bg-primary text-white rounded-xl p-6 sm:p-8 lg:p-10 flex flex-col gap-6 sm:gap-8 flex-1">
               {/* WhatsApp */}
@@ -116,7 +118,7 @@ const ContactPage = () => {
                 </svg>
               </div>
               <div className="min-w-0">
-                <p className="text-lg sm:text-xl lg:text-2xl font-semibold">Whatsapp</p>
+                <p className="text-lg sm:text-xl lg:text-2xl font-semibold">{t.pages?.contact?.whatsapp || 'Whatsapp'}</p>
                 <a
                 href="https://api.whatsapp.com/send?phone=6287777000966"
                 target="_blank"
@@ -144,7 +146,7 @@ const ContactPage = () => {
                 </svg>
               </div>
               <div className="min-w-0">
-                <p className="text-lg sm:text-xl lg:text-2xl font-semibold">E-mail</p>
+                <p className="text-lg sm:text-xl lg:text-2xl font-semibold">{t.pages?.contact?.email || 'E-mail'}</p>
                 <a
                 href="mailto:rexco.indonesia@gmail.com"
                 className="!text-secondary font-bold uppercase tracking-wide text-sm sm:text-base break-all"

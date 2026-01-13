@@ -1,0 +1,105 @@
+// empty
+const en = {
+	nav: {
+		product: "Product",
+		documents: "Documents",
+		brochures: "Brochures",
+		msds_tds: "MSDS & TDS",
+		articles: "Articles",
+		gallery: "Gallery",
+		where_to_buy: "Where To Buy",
+		contact_us: "Contact Us",
+		loading: "Loading...",
+		search_placeholder: "Type to search",
+		language: "Language",
+	},
+	home: {
+		hero: {
+			alt: "Banner",
+		},
+		featured: {
+			title: "REXCO 50 OPTIMAL PROTECTION, MULTI-PURPOSE LUBRICANT",
+			desc: "Rexco 50 is a versatile lubricant offering twice the penetration speed and up to three times the rust protection.",
+			learn_more: "LEARN MORE",
+			related_title: "Related Products",
+			read_more: "READ MORE",
+		},
+		best: {
+			title: "Best Seller Products",
+		},
+		protect: {
+			title: "PROTECT YOUR ENGINE FROM RUST",
+			desc: "Rexco 50 Multipurpose Lubricant is designed for a wide range of applications, protecting metal from rust and corrosion. With its fast penetration, this product easily loosens rusted nuts and bolts.",
+			learn_more: "LEARN MORE",
+		},
+		tips: {
+			title: "TIPS FOR MAINTAINING AND CARE USING REXCO",
+			automotive: "AUTOMOTIVE",
+			automotive_desc: "Maximize your chain's efficiency with our High-Performance Chain Lube. Designed to lubricate and reduce wear, this product extends chain and sprocket life while maintaining optimal performance under high loads and temperatures. This advanced formula offers 2x higher viscosity, 3x more effective lubrication, and 2x better dust resistance.",
+			industrial: "INDUSTRIAL",
+			industrial_desc: "REXCO 70 Multi-Purpose Degreaser is an essential cleaning solution for the automotive and industrial sectors. It's designed to effectively remove oil, dirt, and grease from motorcycle and car engines, as well as industrial equipment and machinery. This versatile cleaner ensures optimal performance by removing buildup that can hinder operation.",
+			hobby: "HOBBY",
+			hobby_desc: "REXCO 70 Multi-Purpose Degreaser is an invaluable cleaning solution for hobbyists who enjoy projects, whether restoring classic cars, maintaining motorcycles, or even tinkering with tools and equipment at home. This versatile cleaner effectively removes oil, dirt, and grease buildup, ensuring your tools and surfaces stay in tip-top condition.",
+		},
+		uses: {
+			title: "How to Use REXCO",
+		},
+	},
+	pages: {
+		blogs: {
+			title: "Articles",
+			loading: "Loading articles...",
+			error: "Failed to load articles",
+			back: "← Back to Blog",
+			notfound: "Article Not Found",
+			article_label: "Article",
+		},
+		brochures: {
+			title: "Brochures",
+			subtitle: "Download REXCO product catalogs and brochures",
+			loading: "Loading brochures...",
+			error: "Failed to load brochure data",
+			download: "Download",
+			retry: "Try Again",
+			no_data: "No brochures available yet",
+		},
+		documents: {
+			title: "Documents (MSDS and TDS)",
+			loading: "Loading documents...",
+			no_data: "No documents available yet.",
+		},
+		contact: {
+			title: "Get In Touch",
+			name: "Name",
+			email: "E-mail",
+			phone: "Phone",
+			subject: "Subject",
+			message: "Message",
+			send: "SEND",
+			info_title: "Contact Information",
+			whatsapp: "Whatsapp",
+			success_message: "Thank you! We will contact you soon.",
+		},
+		gallery: {
+			title: "Gallery",
+			loading: "Loading gallery...",
+			instagram: "Instagram",
+			web_gallery: "Web Gallery",
+			visit_instagram: "VISIT OUR INSTAGRAM",
+		},
+		where_to_buy: {
+			title: "WHERE TO BUY",
+			store_info_title: "Available at your nearest engineering store:",
+			building_materials: "Building Materials Store",
+			engineering_tool: "Engineering Tool Store,",
+			automotive: "Automotive Workshop,",
+			electronics: "Electronics Store",
+			tool_center: "Tool Business Center (ITC Glodok, Kenari Market)",
+			online_store_title: "OFFICIAL ONLINE STORE",
+			available_at: "We are available at",
+			modern_market_title: "MODERN MARKET",
+		},
+	},
+};
+
+export default en;

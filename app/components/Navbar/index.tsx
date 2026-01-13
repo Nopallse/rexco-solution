@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useLanguage } from "@/app/providers/LanguageProvider";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -16,14 +17,15 @@ interface MenuItem {
   children?: MenuItem[];
 }
 
+
 const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
-  const [language, setLanguage] = useState<"en" | "id">("en");
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [products, setProducts] = useState<ProductDto[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [activeMenuItem, setActiveMenuItem] = useState<string | null>(null);
+  const { language, setLanguage, t } = useLanguage();
 
   const pathname = usePathname();
 
@@ -68,9 +70,9 @@ const Navbar: React.FC = () => {
   const menuItems: MenuItem[] = [
     {
       key: "product",
-      label: "Product",
+      label: t.nav?.product || "Product",
       children: loadingProducts
-        ? [{ key: "loading", label: "Loading...", href: "#" }]
+        ? [{ key: "loading", label: t.nav?.loading || "Loading...", href: "#" }]
         : products.map((product) => ({
             key: product.slug,
             label: product.name,
@@ -79,16 +81,16 @@ const Navbar: React.FC = () => {
     },
     {
       key: "documents",
-      label: "Documents",
+      label: t.nav?.documents || "Documents",
       children: [
-        { key: "brochures", label: "Brochures", href: "/brochures" },
-        { key: "documents-msds-tds", label: "MSDS DAN TDS", href: "/documents" },
+        { key: "brochures", label: t.nav?.brochures || "Brochures", href: "/brochures" },
+        { key: "documents-msds-tds", label: t.nav?.msds_tds || "MSDS DAN TDS", href: "/documents" },
       ],
     },
-    { key: "articles", label: "Articles", href: "/blogs" },
-    { key: "gallery", label: "Gallery", href: "/gallery" },
-    { key: "where-to-buy", label: "Where To Buy", href: "/where-to-buy" },
-    { key: "contact-us", label: "Contact Us", href: "/contact-us" },
+    { key: "articles", label: t.nav?.articles || "Articles", href: "/blogs" },
+    { key: "gallery", label: t.nav?.gallery || "Gallery", href: "/gallery" },
+    { key: "where-to-buy", label: t.nav?.where_to_buy || "Where To Buy", href: "/where-to-buy" },
+    { key: "contact-us", label: t.nav?.contact_us || "Contact Us", href: "/contact-us" },
   ];
 
   // Disable body scroll when mobile menu is open
@@ -114,7 +116,6 @@ const Navbar: React.FC = () => {
 
   const switchLanguage = (lang: "en" | "id") => {
     setLanguage(lang);
-    console.log("Language switched to:", lang);
   };
 
   const toggleSubmenu = (key: string) => {
@@ -213,7 +214,7 @@ const Navbar: React.FC = () => {
               size="large"
               allowClear
               prefix={<SearchOutlined className="text-gray-400" />}
-              placeholder="Type to searching"
+              placeholder={t.nav?.search_placeholder || "Type to searching"}
               className="hidden lg:block w-full max-w-[220px] rounded-full"
             />
 
@@ -337,7 +338,7 @@ const Navbar: React.FC = () => {
             <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Language
+                  {t.nav?.language || "Language"}
                 </span>
                 <div className="flex items-center gap-1.5 bg-white p-1 rounded-lg border border-gray-200">
                   <button
