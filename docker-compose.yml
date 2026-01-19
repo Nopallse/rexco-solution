@@ -1,0 +1,18 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_BASE_URL=https://nest-api.ryupowertools.com
+      - NEXT_PUBLIC_SITE_URL=https://ryupowertools.com
+    restart: always
+    networks:
+      - rexco-network
+
+networks:
+  rexco-network:
+    external: true
