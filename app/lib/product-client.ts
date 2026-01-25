@@ -46,7 +46,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
       if (typeof window !== 'undefined') {
         const { clearStoredAuth } = await import('./auth-client');
         clearStoredAuth();
-        window.location.href = '/login';
+        window.location.href = '/log8i8n738';
       }
       throw new Error('Session expired. Please login again.');
     }

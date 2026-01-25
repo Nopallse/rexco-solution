@@ -35,11 +35,11 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const handleLogout = async () => {
     try {
       await logout();
-      router.push('/login');
+      router.push('/log8i8n738');
     } catch (error) {
       console.error('Logout failed:', error);
       // Clear auth anyway and redirect
-      router.push('/login');
+      router.push('/log8i8n738');
     }
   };
 
