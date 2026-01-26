@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useLanguage } from '@/app/providers/LanguageProvider';
 
 export default function FeaturedProductSection() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const productImages = [
     "/images/hero/1.webp",
     "/images/hero/2.webp",
@@ -16,24 +16,33 @@ export default function FeaturedProductSection() {
 
   const relatedProducts = [
     {
-      title: "Produk Perawatan Serbaguna untuk Kebutuhan Sehari-hari REXCO",
+      title: {
+        id: "Produk Perawatan Serbaguna untuk Kebutuhan Sehari-hari REXCO",
+        en: "Multipurpose Care Products for Everyday Needs REXCO",
+      },
       link: "#",
       image: "/images/hero/5.jpg",
     },
     {
-      title: "Solusi Perawatan Terbaik untuk Kendaraan & Industri – REXCO",
+      title: {
+        id: "Solusi Perawatan Terbaik untuk Kendaraan & Industri – REXCO",
+        en: "Best Care Solution for Vehicles & Industry – REXCO",
+      },
       link: "#",
       image: "/images/hero/6.jpg",
     },
     {
-      title: "Pelumas Serbaguna",
+      title: {
+        id: "Pelumas Serbaguna",
+        en: "Multipurpose Lubricant",
+      },
       link: "#",
       image: "/images/hero/7.jpg",
     },
   ];
 
   return (
-    <div className="container mx-auto max-w-screen-xl px-0 sm:px-12 lg:px-16">
+    <div className="container mx-auto max-w-full px-0 sm:px-12 lg:px-16 bg-primary">
       <div className="bg-primary">
         <div className="container mx-auto max-w-screen-xl px-8 sm:px-12 lg:px-16 pb-16 ">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
@@ -87,13 +96,13 @@ export default function FeaturedProductSection() {
                   <div className="flex-shrink-0 w-20 h-20 bg-gray-400 overflow-hidden">
                     <img
                       src={product.image}
-                      alt={product.title}
+                      alt={product.title[language] || product.title.id}
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div className="flex-grow">
                     <p className="text-white text-md font-semibold leading-snug mb-2">
-                      {product.title}
+                      {product.title[language] || product.title.id}
                     </p>
                     <Link
                       href={product.link}

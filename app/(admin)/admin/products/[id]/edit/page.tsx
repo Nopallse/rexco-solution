@@ -15,6 +15,7 @@ import {
   Space,
   Spin,
 } from 'antd';
+import RichTextEditor from '@/app/components/RichTextEditor';
 import {
   ArrowLeftOutlined,
   UploadOutlined,
@@ -343,8 +344,12 @@ export default function EditProductPage() {
             <Input placeholder="e.g., REXCO 82 - Brake Cleaner" size="large" />
           </Form.Item>
 
-          <Form.Item name="description" label="Description">
-            <Input.TextArea rows={4} placeholder="Product description..." />
+          <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please enter product description' }]}> 
+            <RichTextEditor 
+              value={form.getFieldValue('description') || ''}
+              onChange={val => form.setFieldsValue({ description: val })}
+              placeholder="Product description..." 
+            />
           </Form.Item>
 
           <Form.Item

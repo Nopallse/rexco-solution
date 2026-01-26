@@ -14,11 +14,15 @@ import {
   Select,
   Space,
 } from 'antd';
+import RichTextEditor from '@/app/components/RichTextEditor';
 import {
   ArrowLeftOutlined,
   UploadOutlined,
   PlusCircleOutlined,
   MinusCircleOutlined,
+  HolderOutlined,
+  EditOutlined,
+  PlusOutlined,
 } from '@ant-design/icons';
 import type { UploadFile } from 'antd/es/upload/interface';
 import { createProduct, ProductForm } from '@/app/lib/product-client';
@@ -29,7 +33,7 @@ export default function CreateProductPage() {
   const [loading, setLoading] = useState(false);
   const [primaryImageList, setPrimaryImageList] = useState<UploadFile[]>([]);
   const [imagesList, setImagesList] = useState<UploadFile[]>([]);
-  const [documentList, setDocumentList] = useState<UploadFile[]>([]);
+  const [documentFiles, setDocumentFiles] = useState<Record<number, UploadFile[]>>({});
   const [featureIcons, setFeatureIcons] = useState<Record<number, UploadFile[]>>({});
   const [form] = Form.useForm();
 
@@ -43,7 +47,11 @@ export default function CreateProductPage() {
         .map((file) => file.originFileObj)
         .filter(Boolean) as File[];
 
-      const documents = documentList
+
+      // Collect document files per type (same as edit page)
+      const documents = Object.values(documentFiles)
+        .flat()
+        .filter((file) => file.originFileObj)
         .map((file) => file.originFileObj)
         .filter(Boolean) as File[];
 
@@ -59,10 +67,18 @@ export default function CreateProductPage() {
 
       const productDocument = values.productDocument?.map((d: any) => ({ type: d.type }));
 
-      if (productDocument && productDocument.length !== documents.length && documents.length > 0) {
-        message.error('Jumlah dokumen harus sama dengan jumlah tipe dokumen');
-        setLoading(false);
-        return;
+
+      // Validate that each document has a file (same as edit page)
+      if (productDocument && productDocument.length > 0) {
+        const missingDocs = productDocument.some((_: any, idx: number) => {
+          const docFile = documentFiles[idx]?.[0];
+          return !docFile || !docFile.originFileObj;
+        });
+        if (missingDocs) {
+          message.error('Setiap tipe dokumen harus memiliki file');
+          setLoading(false);
+          return;
+        }
       }
 
       const allFeatureHasIcon = productFeature?.length
@@ -124,8 +140,12 @@ export default function CreateProductPage() {
             <Input placeholder="e.g., REXCO 82 - Brake Cleaner" size="large" />
           </Form.Item>
 
-          <Form.Item name="description" label="Description">
-            <Input.TextArea rows={4} placeholder="Product description..." />
+          <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please enter product description' }]}> 
+            <RichTextEditor 
+              value={form.getFieldValue('description') || ''}
+              onChange={val => form.setFieldsValue({ description: val })}
+              placeholder="Product description..." 
+            />
           </Form.Item>
 
           <Form.Item
@@ -142,65 +162,122 @@ export default function CreateProductPage() {
 
           <Divider>Features</Divider>
           <Form.List name="productFeature">
-            {(fields, { add, remove }) => (
-              <div className="space-y-4">
-                {fields.map((field) => (
-                  <Card
-                    key={field.key}
-                    size="small"
-                    title={`Feature ${field.name + 1}`}
-                    extra={
-                      <Button
-                        type="text"
-                        icon={<MinusCircleOutlined />}
-                        onClick={() => remove(field.name)}
-                      />
-                    }
-                  >
-                    <Form.Item
-                      {...field}
-                      name={[field.name, 'text']}
-                      label="Text"
-                      rules={[{ required: true, message: 'Required' }]}
+            {(fields, { add, remove, move }) => {
+              const updateOrder = () => {
+                const features = form.getFieldValue('productFeature') || [];
+                features.forEach((feature: any, idx: number) => {
+                  feature.order = idx + 1;
+                });
+                form.setFieldsValue({ productFeature: features });
+              };
+
+              return (
+                <div className="space-y-3">
+                  {fields.map((field, index) => (
+                    <div
+                      key={field.key}
+                      className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200"
                     >
-                      <Input placeholder="Highlight text" />
-                    </Form.Item>
-                    <div className="grid grid-cols-2 gap-4 items-start">
-                      <Form.Item
-                        {...field}
-                        name={[field.name, 'order']}
-                        label="Order"
-                        rules={[{ required: true, message: 'Required' }]}
-                      >
-                        <InputNumber className="w-full" min={1} />
-                      </Form.Item>
-                      <Form.Item label="Icon (opsional)">
-                        <Upload
-                          listType="picture-card"
-                          maxCount={1}
-                          fileList={featureIcons[field.name] || []}
-                          onChange={({ fileList }) =>
-                            setFeatureIcons((prev) => ({
-                              ...prev,
-                              [field.name]: fileList,
-                            }))
-                          }
-                          beforeUpload={() => false}
+                      <HolderOutlined
+                        className="cursor-move text-gray-400 hover:text-gray-600 flex-shrink-0"
+                        style={{ fontSize: '20px' }}
+                      />
+                      
+                      <div className="flex items-center gap-3 flex-1">
+                        <div className="flex-shrink-0">
+                          <Upload
+                            listType="picture-card"
+                            maxCount={1}
+                            fileList={featureIcons[field.name] || []}
+                            onChange={({ fileList }) =>
+                              setFeatureIcons((prev) => ({
+                                ...prev,
+                                [field.name]: fileList,
+                              }))
+                            }
+                            beforeUpload={() => false}
+                            className="feature-icon-upload"
+                          >
+                            {!featureIcons[field.name]?.length && (
+                              <div>
+                                <PlusOutlined />
+                                <div style={{ marginTop: 4, fontSize: '12px' }}>Icon</div>
+                              </div>
+                            )}
+                          </Upload>
+                        </div>
+
+                        <Form.Item
+                          {...field}
+                          name={[field.name, 'text']}
+                          rules={[{ required: true, message: 'Isi text feature' }]}
+                          className="mb-0 flex-1"
                         >
-                          <div>
-                            <UploadOutlined />
-                            <div className="mt-2">Upload</div>
-                          </div>
-                        </Upload>
-                      </Form.Item>
+                          <Input 
+                            placeholder={`Feature ${index + 1} text...`}
+                            size="large"
+                          />
+                        </Form.Item>
+
+                        <Form.Item
+                          name={[field.name, 'order']}
+                          hidden
+                          initialValue={index + 1}
+                        >
+                          <InputNumber />
+                        </Form.Item>
+                      </div>
+
+                      <Space className="flex-shrink-0">
+                        {index > 0 && (
+                          <Button
+                            type="text"
+                            icon={<span style={{ fontSize: '16px' }}>↑</span>}
+                            onClick={() => {
+                              move(index, index - 1);
+                              setTimeout(updateOrder, 0);
+                            }}
+                            title="Pindah ke atas"
+                          />
+                        )}
+                        {index < fields.length - 1 && (
+                          <Button
+                            type="text"
+                            icon={<span style={{ fontSize: '16px' }}>↓</span>}
+                            onClick={() => {
+                              move(index, index + 1);
+                              setTimeout(updateOrder, 0);
+                            }}
+                            title="Pindah ke bawah"
+                          />
+                        )}
+                        <Button
+                          type="text"
+                          danger
+                          icon={<MinusCircleOutlined />}
+                          onClick={() => {
+                            remove(field.name);
+                            setTimeout(updateOrder, 0);
+                          }}
+                          title="Hapus feature"
+                        />
+                      </Space>
                     </div>
-                  </Card>
-                ))}
-                <Button type="dashed" icon={<PlusCircleOutlined />} onClick={() => add()} block>
-                  Tambah Feature
-                </Button>
-              </div>
-            )}
+                  ))}
+                  <Button
+                    type="dashed"
+                    icon={<PlusCircleOutlined />}
+                    onClick={() => {
+                      add({ text: '', order: fields.length + 1 });
+                    }}
+                    block
+                    size="large"
+                  >
+                    Tambah Feature
+                  </Button>
+                </div>
+              );
+            }}
           </Form.List>
 
           <Divider>Store Variants</Divider>
@@ -288,30 +365,58 @@ export default function CreateProductPage() {
             )}
           </Form.List>
 
+
           <Divider>Documents</Divider>
           <Form.List name="productDocument">
             {(fields, { add, remove }) => (
               <div className="space-y-3">
                 {fields.map((field) => (
-                  <div key={field.key} className="grid grid-cols-2 gap-3 items-end">
-                    <Form.Item
-                      {...field}
-                      name={[field.name, 'type']}
-                      label="Type"
-                      rules={[{ required: true, message: 'Required' }]}
-                    >
-                      <Select placeholder="Pilih tipe">
-                        <Select.Option value="MSDS">MSDS</Select.Option>
-                        <Select.Option value="TDS">TDS</Select.Option>
-                      </Select>
-                    </Form.Item>
+                  <Card key={field.key} size="small">
+                    <div className="grid grid-cols-2 gap-4">
+                      <Form.Item
+                        {...field}
+                        name={[field.name, 'type']}
+                        label="Type"
+                        rules={[{ required: true, message: 'Required' }]}
+                      >
+                        <Select placeholder="Pilih tipe">
+                          <Select.Option value="MSDS">MSDS</Select.Option>
+                          <Select.Option value="TDS">TDS</Select.Option>
+                        </Select>
+                      </Form.Item>
+                      <Form.Item label="File">
+                        <Upload
+                          maxCount={1}
+                          fileList={documentFiles[field.name] || []}
+                          onChange={({ fileList }) =>
+                            setDocumentFiles((prev) => ({
+                              ...prev,
+                              [field.name]: fileList,
+                            }))
+                          }
+                          beforeUpload={() => false}
+                        >
+                          <Button icon={<UploadOutlined />}>Upload</Button>
+                        </Upload>
+                      </Form.Item>
+                    </div>
                     <Button
                       type="text"
                       danger
                       icon={<MinusCircleOutlined />}
-                      onClick={() => remove(field.name)}
-                    />
-                  </div>
+                      onClick={() => {
+                        remove(field.name);
+                        setDocumentFiles((prev) => {
+                          const newDocs = { ...prev };
+                          delete newDocs[field.name];
+                          return newDocs;
+                        });
+                      }}
+                      block
+                    >
+                      Hapus Dokumen
+                    </Button>
+                  </Card>
                 ))}
                 <Button
                   type="dashed"
@@ -328,45 +433,30 @@ export default function CreateProductPage() {
           <div className="grid grid-cols-2 gap-4">
             <Form.Item label="Primary Image">
               <Upload
-                listType="picture-card"
+                listType="picture"
                 maxCount={1}
                 fileList={primaryImageList}
                 onChange={({ fileList }) => setPrimaryImageList(fileList)}
                 beforeUpload={() => false}
               >
-                <div>
-                  <UploadOutlined />
-                  <div className="mt-2">Upload</div>
-                </div>
+                <Button icon={primaryImageList.length ? <EditOutlined /> : <PlusOutlined />} />
               </Upload>
             </Form.Item>
 
             <Form.Item label="Additional Images">
               <Upload
-                listType="picture-card"
+                listType="picture"
                 multiple
                 fileList={imagesList}
                 onChange={({ fileList }) => setImagesList(fileList)}
                 beforeUpload={() => false}
               >
-                <div>
-                  <UploadOutlined />
-                  <div className="mt-2">Upload</div>
-                </div>
+                <Button icon={<PlusOutlined />} />
               </Upload>
             </Form.Item>
           </div>
 
-          <Form.Item label="Documents">
-            <Upload
-              multiple
-              fileList={documentList}
-              onChange={({ fileList }) => setDocumentList(fileList)}
-              beforeUpload={() => false}
-            >
-              <Button icon={<UploadOutlined />}>Upload Documents</Button>
-            </Upload>
-          </Form.Item>
+
 
           <Divider />
           <Space>

@@ -130,7 +130,7 @@ export default function ProductDetailPage() {
               <div>
                 <Text strong>Description:</Text>
                 <Paragraph className="mt-2 text-gray-700">
-                  {product.description}
+                  <span dangerouslySetInnerHTML={{ __html: product.description }} />
                 </Paragraph>
               </div>
             )}

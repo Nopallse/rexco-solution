@@ -11,6 +11,7 @@ import {
   type ProductDto,
 } from "@/app/lib/product-client";
 import { getImageUrl, getFileUrl } from "@/app/lib/image-utils";
+import { forceWrapHtml } from "@/app/lib/forceWrapHtml";
 
 const STORE_ICON: Record<string, string> = {
   Tokopedia: "/images/icon/tokopedia_icon.png",
@@ -54,6 +55,11 @@ export default function ProductDetailBySlugPage() {
       active = false;
     };
   }, [slug]);
+
+  const safeDescription = useMemo(() => {
+    if (typeof product?.description !== "string") return "";
+    return forceWrapHtml(product.description);
+  }, [product?.description]);
 
   const images: string[] = useMemo(() => {
     const arr: string[] = [];
@@ -116,20 +122,18 @@ export default function ProductDetailBySlugPage() {
             </h1>
 
             {/* Description */}
-            <div className="mb-4 sm:mb-6 max-h-60 sm:max-h-72 overflow-y-auto pr-2">
-              {typeof product.description === "string" &&
-              product.description.trim().startsWith("<") ? (
-                <div
-                  className="text-gray-700 text-sm sm:text-base leading-relaxed"
-                  dangerouslySetInnerHTML={{
-                    __html: product.description || "",
-                  }}
-                />
-              ) : (
-                <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
-                  {product.description}
-                </p>
-              )}
+            <div className="mb-6 max-h-60 overflow-y-auto pr-2">
+              <div
+                className="text-gray-700 text-sm sm:text-base leading-relaxed"
+                style={{
+                  whiteSpace: "normal",
+                  wordBreak: "normal",
+                  overflowWrap: "normal",
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: safeDescription,
+                }}
+              />
             </div>
 
             {/* Beli Melalui (Variants + Stores) */}
@@ -283,7 +287,9 @@ export default function ProductDetailBySlugPage() {
                     {documents.map((doc, index) => (
                       <button
                         key={index}
-                        onClick={() => window.open(getFileUrl(doc.file!), '_blank')}
+                        onClick={() =>
+                          window.open(getFileUrl(doc.file!), "_blank")
+                        }
                         className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-primary text-white hover:bg-secondary hover:text-primary transition-colors text-sm sm:text-base font-semibold uppercase rounded cursor-pointer"
                       >
                         <DownloadOutlined />
@@ -315,8 +321,8 @@ export default function ProductDetailBySlugPage() {
                         item.primaryImage
                           ? getImageUrl(item.primaryImage)
                           : item.productImage?.[0]?.url
-                          ? getImageUrl(item.productImage[0].url)
-                          : "/images/product.jpg"
+                            ? getImageUrl(item.productImage[0].url)
+                            : "/images/product.jpg"
                       }
                       alt={item.name}
                       className="max-h-[70%] w-full aspect-square object-contain"
@@ -327,7 +333,13 @@ export default function ProductDetailBySlugPage() {
                   </h4>
                   <button className="w-full bg-primary text-white font-extrabold h-[50px] sm:h-[60px] lg:h-[70px] text-xs sm:text-sm lg:text-base tracking-wide uppercase flex items-center justify-between px-3 sm:px-4 lg:px-6 hover:bg-secondary hover:text-primary transition-colors cursor-pointer mt-auto">
                     <span>LEBIH DETAIL</span>
-                    <svg aria-hidden="true" className="w-5 h-5 sm:w-5 sm:h-5" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                    <svg
+                      aria-hidden="true"
+                      className="w-5 h-5 sm:w-5 sm:h-5"
+                      viewBox="0 0 448 512"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                    >
                       <path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path>
                     </svg>
                   </button>

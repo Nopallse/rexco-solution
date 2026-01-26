@@ -9,11 +9,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'ryupowertools.com',
+        hostname: 'rexco-solution.com',
       },
       {
         protocol: 'https',
-        hostname: 'nest-api.ryupowertools.com',
+        hostname: 'nest-api.rexco-solution.com',
       },
     ],
   },

@@ -22,4 +22,4 @@ export const languages: { code: Language; name: string; flag: string }[] = [
 export const defaultLanguage: Language = 'en';
 
 // Storage key for persisting language preference
-export const LANGUAGE_STORAGE_KEY = 'ryu-language';
+export const LANGUAGE_STORAGE_KEY = 'rexco-language';
