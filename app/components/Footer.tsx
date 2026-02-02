@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Button, Input } from 'antd';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { listProducts, ProductDto } from '@/app/lib/product-client';
+import { useLanguage } from '@/app/providers/LanguageProvider';
 
 const socialIcons = [
   { icon: '/images/icon/facebook.png', link: 'https://facebook.com', alt: 'Facebook' },
@@ -13,6 +14,27 @@ const socialIcons = [
 
 export default function Footer() {
   const [email, setEmail] = useState('');
+  const [products, setProducts] = useState<ProductDto[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+  const { language } = useLanguage();
+
+  const withLang = (href: string) => (href.startsWith('/') ? `/${language}${href}` : href);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const data = await listProducts();
+        setProducts(data || []);
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+        setProducts([]);
+      } finally {
+        setLoadingProducts(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
     <footer className="bg-primary">
@@ -37,21 +59,17 @@ export default function Footer() {
             <div className="md:col-span-3">
               <h3 className="font-bold text-lg  text-white mb-2 underline ">PRODUCT</h3>
               <ul className="space-y-3">
-                <li>
-                  <Link href="/category/power-tools" className="!text-white !text-md !font-bold !no-underline">
-                  REXCO 50 | MULTIPURPOSE LUBRICANT
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/category/engine" className="!text-white !text-md !font-bold !no-underline">
-                  REXCO 18 | SPECIALIST CONTACT CLEANER
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/category/accessories" className="!text-white !text-md !font-bold !no-underline">
-                  REXCO 81 | CARB & INJECTOR CLEANER
-                  </Link>
-                </li>
+                {loadingProducts ? (
+                  <li className="!text-white !text-md !font-bold">Loading...</li>
+                ) : (
+                  products.slice(0, 3).map((product) => (
+                    <li key={product.slug}>
+                      <Link href={withLang(`/product/${product.slug}`)} className="!text-white !text-md !font-bold !no-underline">
+                        {product.name}
+                      </Link>
+                    </li>
+                  ))
+                )}
               </ul>
             </div>
 
@@ -59,12 +77,12 @@ export default function Footer() {
             <div>
               <ul className="space-y-3">
                 <li>
-                  <Link href="/contact"  className="!text-white !text-md !font-bold !no-underline">
+                  <Link href={withLang("/contact")}  className="!text-white !text-md !font-bold !no-underline">
                     GALLERY
                   </Link>
                 </li>
                 <li>
-                  <Link href="/service-center"  className="!text-white !text-md !font-bold !no-underline">
+                  <Link href={withLang("/service-center")}  className="!text-white !text-md !font-bold !no-underline">
                     ARTICLE
                   </Link>
                 </li>
@@ -75,12 +93,12 @@ export default function Footer() {
             <div>
               <ul className="space-y-3">
                 <li>
-                  <Link href="/contact"  className="!text-white !text-md !font-bold !no-underline">
+                  <Link href={withLang("/contact")}  className="!text-white !text-md !font-bold !no-underline">
                     CONTACT US
                   </Link>
                 </li>
                 <li>
-                  <Link href="/service-center"  className="!text-white !text-md !font-bold !no-underline">
+                  <Link href={withLang("/service-center")}  className="!text-white !text-md !font-bold !no-underline">
                     WHERE TO BUY
                   </Link>
                 </li>

@@ -5,6 +5,7 @@ import { getFileUrl, getImageUrl } from "@/app/lib/image-utils";
 import { useEffect, useState } from "react";
 import { useLanguage } from '@/app/providers/LanguageProvider';
 
+
 export default function BrochuresPage() {
   const { t } = useLanguage();
   const [brochures, setBrochures] = useState<DocumentDto[]>([]);

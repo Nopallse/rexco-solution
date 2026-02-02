@@ -1,5 +1,6 @@
 import React from 'react';
 import LanguageProvider from './providers/LanguageProvider';
+import GoogleTranslateProvider from './providers/GoogleTranslateProvider';
 import { Montserrat } from 'next/font/google';
 import { App as AntdApp, ConfigProvider } from 'antd';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
@@ -22,6 +23,7 @@ const RootLayout = ({ children }: React.PropsWithChildren) => (
   <html lang="en" className={`${montserrat.variable}`} suppressHydrationWarning>
     <body suppressHydrationWarning>
       <LanguageProvider>
+        <GoogleTranslateProvider />
         <AntdRegistry>
           <ConfigProvider theme={theme}>
             <AntdApp>

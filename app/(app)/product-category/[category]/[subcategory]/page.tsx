@@ -4,6 +4,7 @@ import React, { use } from "react";
 import { Card, Row, Col, Button } from "antd";
 import Link from "next/link";
 import Image from "next/image";
+import { useLanguage } from '@/app/providers/LanguageProvider';
 
 // Mock data untuk contoh - nanti bisa diganti dengan data dari API/database
 const mockProducts = {
@@ -90,6 +91,8 @@ interface ProductCategoryPageProps {
 const ProductCategoryPage: React.FC<ProductCategoryPageProps> = ({
   params,
 }) => {
+  const { language } = useLanguage();
+  const withLang = (href: string) => (href.startsWith('/') ? `/${language}${href}` : href);
   const { category, subcategory } = use(params);
 
   const products = mockProducts[subcategory as keyof typeof mockProducts] || [];
@@ -111,7 +114,7 @@ const ProductCategoryPage: React.FC<ProductCategoryPageProps> = ({
       {products.length > 0 ? (
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {products.map((product) => (
-            <Link href={`/product/${product.id}`} key={product.id}>
+            <Link href={withLang(`/product/${product.id}`)} key={product.id}>
               <div className="flex flex-col items-center">
                 <Card
                   hoverable
@@ -160,7 +163,7 @@ const ProductCategoryPage: React.FC<ProductCategoryPageProps> = ({
           <p className="text-base text-gray-600 mb-8">
             Products for this category are coming soon.
           </p>
-          <Link href="/">
+          <Link href={withLang("/")}>
             <Button type="primary" size="large">
               Back to Home
             </Button>

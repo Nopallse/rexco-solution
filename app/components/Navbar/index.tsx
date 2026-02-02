@@ -27,6 +27,8 @@ const Navbar: React.FC = () => {
   const [activeMenuItem, setActiveMenuItem] = useState<string | null>(null);
   const { language, setLanguage, t } = useLanguage();
 
+  const withLang = (href: string) => (href.startsWith('/') ? `/${language}${href}` : href);
+
   const pathname = usePathname();
 
   // Derive active menu from current path
@@ -127,7 +129,7 @@ const Navbar: React.FC = () => {
       {/* Top Bar - Purple with Logo - Sticky */}
       <div className="bg-[#323288] w-full shadow-md">
         <div className="max-w-[1400px] mx-auto px-8 flex justify-center">
-          <Link href="/" className="inline-flex items-center py-4">
+          <Link href={withLang("/")} className="inline-flex items-center py-4">
             <Image
               src="/images/logo-rexco.png"
               alt="Rexco Logo"
@@ -161,7 +163,7 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Logo & Menu */}
           <nav className="hidden lg:flex flex-1 items-center gap-8">
-            <Link href="/" className="inline-flex items-center">
+            <Link href={withLang("/")} className="inline-flex items-center">
               <Image
                 src="/images/logo-rexco-secondary.png"
                 alt="Rexco Logo"
@@ -186,7 +188,7 @@ const Navbar: React.FC = () => {
                         {item.children.map((child) => (
                           <Link
                             key={child.key}
-                            href={child.href || "#"}
+                            href={child.href ? withLang(child.href) : "#"}
                             className={styles.desktopMenuLink}
                           >
                             {child.label}
@@ -195,7 +197,7 @@ const Navbar: React.FC = () => {
                       </div>
                     </div>
                   ) : (
-                    <Link href={item.href || "#"} className={`${styles.desktopMenuButton} ${activeMenuItem === item.key ? '!border-b-3 !border-secondary' : ''}`} onClick={() => setActiveMenuItem(item.key)}>
+                    <Link href={item.href ? withLang(item.href) : "#"} className={`${styles.desktopMenuButton} ${activeMenuItem === item.key ? '!border-b-3 !border-secondary' : ''}`} onClick={() => setActiveMenuItem(item.key)}>
                       {item.label}
                     </Link>
                   )}
@@ -308,7 +310,7 @@ const Navbar: React.FC = () => {
                           {item.children.map((child) => (
                             <Link
                               key={child.key}
-                              href={child.href || "#"}
+                              href={child.href ? withLang(child.href) : "#"}
                               onClick={toggleMobileMenu}
                               className="block px-10 py-3 text-[#323288] font-medium text-sm hover:bg-gray-100 transition-colors"
                             >
@@ -320,7 +322,7 @@ const Navbar: React.FC = () => {
                     </>
                   ) : (
                     <Link
-                      href={item.href || "#"}
+                      href={item.href ? withLang(item.href) : "#"}
                       onClick={() => {
                         toggleMobileMenu();
                         setActiveMenuItem(item.key);

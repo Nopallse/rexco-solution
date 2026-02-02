@@ -5,6 +5,13 @@ const nextConfig: NextConfig = {
   
   compress: true,
   
+  async rewrites() {
+    return [
+      { source: '/:lang(en|id)', destination: '/' },
+      { source: '/:lang(en|id)/:path*', destination: '/:path*' },
+    ];
+  },
+  
   images: {
     remotePatterns: [
       {

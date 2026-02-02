@@ -6,8 +6,10 @@ import { listProducts, type ProductDto } from "@/app/lib/product-client";
 import { getImageUrl, getFileUrl } from "@/app/lib/image-utils";
 import { useLanguage } from '@/app/providers/LanguageProvider';
 
+
 export default function DocumentsPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const withLang = (href: string) => (href.startsWith('/') ? `/${language}${href}` : href);
   const [products, setProducts] = useState<ProductDto[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -154,7 +156,7 @@ export default function DocumentsPage() {
 
                   {/* Go to Product Page */}
                   <Link
-                    href={`/product/${item.slug ?? item.id}`}
+                    href={withLang(`/product/${item.slug ?? item.id}`)}
                     className="w-full h-12 sm:h-14 lg:h-16 text-sm sm:text-base text-gray-600 font-extrabold uppercase flex items-center hover:text-black transition-colors"
                   >
                     <div className="flex items-center justify-between w-full gap-2 text-[#727272] hover:text-black">

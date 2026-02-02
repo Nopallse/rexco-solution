@@ -7,8 +7,10 @@ import { getImageUrl } from "@/app/lib/image-utils";
 import type { Article } from "@/app/lib/article-api";
 import { useLanguage } from '@/app/providers/LanguageProvider';
 
+
 export default function BlogPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const withLang = (href: string) => (href.startsWith('/') ? `/${language}${href}` : href);
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -101,12 +103,12 @@ export default function BlogPage() {
                 </svg>
                 <span className="text-lg font-semibold text-[#717171]">
                   {article.publishedAt
-                    ? new Date(article.publishedAt).toLocaleDateString("id-ID", {
+                    ? new Date(article.publishedAt).toLocaleDateString(language === 'en' ? "en-US" : "id-ID", {
                         year: "numeric",
                         month: "long",
                         day: "numeric",
                       })
-                    : new Date(article.createdAt || "").toLocaleDateString("id-ID", {
+                    : new Date(article.createdAt || "").toLocaleDateString(language === 'en' ? "en-US" : "id-ID", {
                         year: "numeric",
                         month: "long",
                         day: "numeric",
@@ -123,9 +125,9 @@ export default function BlogPage() {
                 </p>
 
                 <button className="mt-6 self-start !text-[#717171] font-bold uppercase decoration-2 underline-offset-4 flex items-center gap-2 hover:text-black">
-                  <Link href={`/blogs/${article.slug}`}>
+                  <Link href={withLang(`/blogs/${article.slug}`)}>
                   <span className="flex items-center justify-center gap-2 !text-[#717171]">
-                    Selengkapnya
+                    {language === 'en' ? 'Read More' : 'Selengkapnya'}
                   <svg
                     className="w-4 h-4"
                     aria-hidden="true"

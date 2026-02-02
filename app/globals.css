@@ -43,6 +43,31 @@ body {
   color: var(--foreground);
 }
 
+/* Hide Google Translate UI */
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+.goog-te-gadget,
+.goog-te-gadget-icon,
+.goog-logo-link,
+.goog-te-menu-value,
+.goog-te-menu-frame,
+#goog-gt-tt,
+.goog-te-balloon-frame,
+.goog-tooltip {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+iframe.goog-te-banner-frame,
+iframe.goog-te-menu-frame {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+body {
+  top: 0 !important;
+}
+
 .primary {
   background: var(--primary) !important;
   color: #fff;

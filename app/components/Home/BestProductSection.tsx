@@ -8,7 +8,8 @@ import { getImageUrl } from "@/app/lib/image-utils";
 import { useLanguage } from '@/app/providers/LanguageProvider';
 
 export default function BestProductSection() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const withLang = (href: string) => (href.startsWith('/') ? `/${language}${href}` : href);
   const [products, setProducts] = useState<ProductDto[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -82,13 +83,13 @@ export default function BestProductSection() {
                       ))}
                     </div>
                   <div className="mt-auto pt-4 animate-slide-up">
-                    <Link href={`/product/${product.slug}`}>
+                    <Link href={withLang(`/product/${product.slug}`)}>
                       <Button
                         type="primary"
                         size="large"
                         className="!bg-[#323288] hover:!bg-[#2d1e4e] !border-none  !px-8 !h-auto !py-2 !text-base font-bold tracking-wider "
                       >
-                        LEARN MORE
+                        {language === 'en' ? 'LEARN MORE' : 'PELAJARI LEBIH LANJUT'}
                       </Button>
                     </Link>
                   </div>

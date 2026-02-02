@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { Button, Spin } from "antd";
+import { Spin } from "antd";
 import { DownloadOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import {
   getProductBySlug,
@@ -12,6 +12,7 @@ import {
 } from "@/app/lib/product-client";
 import { getImageUrl, getFileUrl } from "@/app/lib/image-utils";
 import { forceWrapHtml } from "@/app/lib/forceWrapHtml";
+import { useLanguage } from '@/app/providers/LanguageProvider';
 
 const STORE_ICON: Record<string, string> = {
   Tokopedia: "/images/icon/tokopedia_icon.png",
@@ -19,6 +20,8 @@ const STORE_ICON: Record<string, string> = {
 };
 
 export default function ProductDetailBySlugPage() {
+  const { language } = useLanguage();
+  const withLang = (href: string) => (href.startsWith('/') ? `/${language}${href}` : href);
   const params = useParams();
   const slug = String(params.slug || "");
 
@@ -59,7 +62,7 @@ export default function ProductDetailBySlugPage() {
   const safeDescription = useMemo(() => {
     if (typeof product?.description !== "string") return "";
     return forceWrapHtml(product.description);
-  }, [product?.description]);
+  }, [product]);
 
   const images: string[] = useMemo(() => {
     const arr: string[] = [];
@@ -97,7 +100,7 @@ export default function ProductDetailBySlugPage() {
           <h1 className="text-3xl font-bold text-gray-800 mb-4">
             Product Not Found
           </h1>
-          <Link href="/" className="text-[#2d5016] hover:underline">
+          <Link href={withLang("/")} className="text-[#2d5016] hover:underline">
             ← Back to Home
           </Link>
         </div>
@@ -106,9 +109,9 @@ export default function ProductDetailBySlugPage() {
   }
 
   const variantNames =
-    product.productStore?.map((v) => v.name).filter(Boolean) ?? [];
+    product?.productStore?.map((v) => v.name).filter(Boolean) ?? [];
   const selectedStores =
-    product.productStore?.[selectedVariant]?.productStore ?? [];
+    product?.productStore?.[selectedVariant]?.productStore ?? [];
 
   return (
     <div className="bg-white py-8 sm:py-12 lg:py-20">
@@ -118,7 +121,7 @@ export default function ProductDetailBySlugPage() {
           {/* Left Column - Info */}
           <div className="order-2 lg:order-1">
             <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-primary mb-4 sm:mb-6 lg:mb-8 uppercase leading-tight">
-              {product.name}
+              {product?.name}
             </h1>
 
             {/* Description */}
@@ -210,7 +213,7 @@ export default function ProductDetailBySlugPage() {
             )}
 
             {/* YouTube Video */}
-            {product.urlYoutube && (
+            {product?.urlYoutube && (
               <div className="mt-4 sm:mt-6">
                 <h3 className="text-base sm:text-lg font-bold text-primary mb-3 flex items-center gap-2">
                   <PlayCircleOutlined className="text-xl" />
@@ -220,7 +223,7 @@ export default function ProductDetailBySlugPage() {
                   <iframe
                     width="100%"
                     height="100%"
-                    src={product.urlYoutube
+                    src={(product?.urlYoutube || "")
                       .replace("youtu.be/", "youtube.com/embed/")
                       .replace("watch?v=", "embed/")}
                     title="Product video"
@@ -246,7 +249,7 @@ export default function ProductDetailBySlugPage() {
               >
                 <img
                   src={images[selectedImage]}
-                  alt={product.name}
+                  alt={product?.name}
                   className="w-full h-auto object-contain max-h-[300px] sm:max-h-[400px] lg:max-h-[500px] mx-auto"
                   style={{
                     transform: isZoomed ? "scale(2)" : "scale(1)",
@@ -271,7 +274,7 @@ export default function ProductDetailBySlugPage() {
                     >
                       <img
                         src={img}
-                        alt={`${product.name} thumbnail ${index + 1}`}
+                        alt={`${product?.name} thumbnail ${index + 1}`}
                         className="w-full h-full object-cover"
                       />
                     </button>
@@ -313,7 +316,7 @@ export default function ProductDetailBySlugPage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8">
             {related.map((item) => (
-              <Link href={`/product/${item.slug}`} key={item.id}>
+              <Link href={withLang(`/product/${item.slug}`)} key={item.id}>
                 <div className="flex flex-col items-center h-full">
                   <div className="w-full bg-[#f0f2fb] aspect-square flex items-center justify-center transition-transform duration-300 hover:translate-y-[-6px]">
                     <img

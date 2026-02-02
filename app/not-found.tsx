@@ -3,8 +3,12 @@
 import Link from 'next/link';
 import { Button } from 'antd';
 import { HomeOutlined, ArrowLeftOutlined } from '@ant-design/icons';
+import { useLanguage } from '@/app/providers/LanguageProvider';
 
 export default function NotFound() {
+  const { language } = useLanguage();
+  const withLang = (href: string) => (href.startsWith('/') ? `/${language}${href}` : href);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="text-center px-4">
@@ -21,7 +25,7 @@ export default function NotFound() {
         </div>
 
         <div className="flex gap-4 justify-center flex-wrap">
-          <Link href="/">
+          <Link href={withLang("/")}>
             <Button 
               type="primary" 
               size="large" 
@@ -41,7 +45,7 @@ export default function NotFound() {
         </div>
 
         <div className="mt-12 text-sm text-gray-500">
-          <p>Butuh bantuan? <Link href="/contact-us" className="text-red-600 hover:text-red-700 underline">Hubungi Kami</Link></p>
+          <p>Butuh bantuan? <Link href={withLang("/contact-us")} className="text-red-600 hover:text-red-700 underline">Hubungi Kami</Link></p>
         </div>
       </div>
     </div>
