@@ -1,18 +1,13 @@
+
+version: "3.9"
+
 services:
   frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "3001:3001"
-    environment:
-      - NODE_ENV=production
-      - NEXT_PUBLIC_API_BASE_URL=https://nest-api.rexco-solution.com
-      - NEXT_PUBLIC_SITE_URL=https://rexco-solution.com
+    image: rexco-frontend-app
+    container_name: rexco-nextjs
+    build: .
     restart: always
-    networks:
-      - rexco-network
-
-networks:
-  rexco-network:
-    external: true
+    ports:
+      - "3003:3000"
+    env_file:
+      - .env.production
