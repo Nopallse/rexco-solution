@@ -100,50 +100,7 @@ export default function GoogleTranslateProvider() {
         }}
       />
       
-      {isTranslating && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.3)',
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backdropFilter: 'blur(2px)',
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: 'white',
-              padding: '24px 48px',
-              borderRadius: '8px',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '16px',
-            }}
-          >
-            <div
-              style={{
-                width: '48px',
-                height: '48px',
-                border: '4px solid #f3f3f3',
-                borderTop: '4px solid #323288',
-                borderRadius: '50%',
-                animation: 'spin 1s linear infinite',
-              }}
-            />
-            <p style={{ margin: 0, fontSize: '16px', color: '#323288', fontWeight: 600 }}>
-              {language === 'id' ? 'Menerjemahkan...' : 'Translating...'}
-            </p>
-          </div>
-        </div>
-      )}
+     
       
       <style jsx>{`
         @keyframes spin {
