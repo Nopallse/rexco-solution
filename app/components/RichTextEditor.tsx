@@ -13,8 +13,8 @@ const ReactQuill = dynamic(
 );
 
 interface RichTextEditorProps {
-  value: string;
-  onChange: (content: string) => void;
+  value?: string;
+  onChange?: (content: string) => void;
   placeholder?: string;
   onImageButtonClick?: () => void;
   onImageUpload?: (file: File) => Promise<string>;
@@ -28,7 +28,17 @@ export interface RichTextEditorRef {
 }
 
 const RichTextEditor = forwardRef<RichTextEditorRef, RichTextEditorProps>(
-  ({ value, onChange, placeholder = 'Write your content here...', onImageButtonClick, onImageUpload, className = '' }, ref) => {
+  (
+    {
+      value = '',
+      onChange = () => {},
+      placeholder = 'Write your content here...',
+      onImageButtonClick,
+      onImageUpload,
+      className = '',
+    },
+    ref
+  ) => {
     const quillRef = useRef<any>(null);
 
     // Insert image into editor

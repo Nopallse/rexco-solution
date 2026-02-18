@@ -75,6 +75,15 @@ export async function listBestSellerProducts(): Promise<ProductDto[]> {
   return handleResponse<ProductDto[]>(response);
 }
 
+export async function searchProducts(query: string): Promise<ProductDto[]> {
+  if (!query.trim()) return [];
+  const response = await fetch(
+    `${API_BASE}/product/search?search=${encodeURIComponent(query)}`,
+    { cache: "no-store" }
+  );
+  return handleResponse<ProductDto[]>(response);
+}
+
 export async function getProduct(id: string): Promise<ProductDto> {
   const response = await fetch(`${API_BASE}/product/${id}`, { cache: "no-store" });
   return handleResponse<ProductDto>(response);

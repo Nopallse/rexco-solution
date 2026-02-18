@@ -5,7 +5,8 @@ import { Button } from "antd";
 import { useLanguage } from '@/app/providers/LanguageProvider';
 
 export default function ProtectSection() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const withLang = (href: string) => (href.startsWith('/') ? `/${language}${href}` : href);
   useEffect(() => {
     // Dynamically import and register the image-compare web component
     const loadImageCompare = () => {
@@ -36,7 +37,7 @@ export default function ProtectSection() {
                 type="primary"
                 size="large"
                 className="!inline-flex !items-center !w-auto !self-start !px-6 sm:!px-8 lg:!px-10 !py-3 sm:!py-4 lg:!py-6 !border-white !text-white !font-bold !text-sm sm:!text-base lg:!text-lg !transition-colors !duration-200 hover:!bg-secondary hover:!text-primary focus:!outline-none focus:!ring-2 focus:!ring-white"
-                href="#"
+                href={withLang("/contact-us")}
               >
                 LEARN MORE
                 <span className="ml-2 sm:ml-4 text-lg sm:text-xl lg:text-2xl">&#8594;</span>

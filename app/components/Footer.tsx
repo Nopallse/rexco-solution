@@ -6,10 +6,10 @@ import { listProducts, ProductDto } from '@/app/lib/product-client';
 import { useLanguage } from '@/app/providers/LanguageProvider';
 
 const socialIcons = [
-  { icon: '/images/icon/facebook.png', link: 'https://facebook.com', alt: 'Facebook' },
-  { icon: '/images/icon/instagram.png', link: 'https://instagram.com', alt: 'Instagram' },
-  { icon: '/images/icon/youtube.png', link: 'https://youtube.com', alt: 'Youtube' },
-  { icon: '/images/icon/tik-tok.png', link: 'https://tiktok.com', alt: 'TikTok' }
+  { icon: '/images/icon/facebook.png', link: 'https://www.facebook.com/rexco.id', alt: 'Facebook' },
+  { icon: '/images/icon/instagram.png', link: 'https://www.instagram.com/rexco.id', alt: 'Instagram' },
+  { icon: '/images/icon/youtube.png', link: 'https://www.youtube.com/@REXCOIndonesia', alt: 'Youtube' },
+  { icon: '/images/icon/tik-tok.png', link: 'https://www.tiktok.com/@rexcoindonesia', alt: 'TikTok' }
 ];
 
 export default function Footer() {

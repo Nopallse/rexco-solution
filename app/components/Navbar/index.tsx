@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Input } from "antd";
 import { SearchOutlined, MenuOutlined, CloseOutlined } from "@ant-design/icons";
 import styles from "./navbar.module.css";
@@ -25,11 +25,13 @@ const Navbar: React.FC = () => {
   const [products, setProducts] = useState<ProductDto[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [activeMenuItem, setActiveMenuItem] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const { language, setLanguage, t } = useLanguage();
 
   const withLang = (href: string) => (href.startsWith('/') ? `/${language}${href}` : href);
 
   const pathname = usePathname();
+  const router = useRouter();
 
   // Derive active menu from current path
   useEffect(() => {
@@ -124,6 +126,14 @@ const Navbar: React.FC = () => {
     setOpenSubmenu(openSubmenu === key ? null : key);
   };
 
+  const handleSearchSubmit = (value?: string) => {
+    const query = (value ?? searchQuery).trim();
+    if (!query) return;
+    router.push(withLang(`/search?search=${encodeURIComponent(query)}`));
+    setSearchVisible(false);
+    setMobileMenuOpen(false);
+  };
+
   return (
     <>
       {/* Top Bar - Purple with Logo - Sticky */}
@@ -209,7 +219,15 @@ const Navbar: React.FC = () => {
           {/* Right Actions */}
           <div className="flex items-center gap-3">
             {/* Search Button - Mobile */}
-            
+            <button
+              type="button"
+              className="lg:hidden flex items-center justify-center p-2 text-[#1d1b1b] hover:bg-gray-100 rounded transition-colors"
+              onClick={toggleSearch}
+              aria-label="Search"
+              aria-expanded={searchVisible}
+            >
+              <SearchOutlined className="text-xl" />
+            </button>
 
             {/* Search Input - Desktop */}
             <Input
@@ -217,6 +235,9 @@ const Navbar: React.FC = () => {
               allowClear
               prefix={<SearchOutlined className="text-gray-400" />}
               placeholder={t.nav?.search_placeholder || "Type to searching"}
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              onPressEnter={(event) => handleSearchSubmit(event.currentTarget.value)}
               className="hidden lg:block w-full max-w-[220px] rounded-full"
             />
 
@@ -268,6 +289,9 @@ const Navbar: React.FC = () => {
               prefix={<SearchOutlined className="text-gray-400" />}
               placeholder="Search Model, Product, etc"
               className="w-full rounded-full"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              onPressEnter={(event) => handleSearchSubmit(event.currentTarget.value)}
             />
           </div>
         )}

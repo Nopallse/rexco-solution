@@ -302,25 +302,6 @@ export default function EditProductPage() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Spin size="large" />
-      </div>
-    );
-  }
-
-  if (!product) {
-    return (
-      <div className="p-8 text-center">
-        <p className="text-gray-600">Product not found</p>
-        <Button type="primary" onClick={() => router.push('/admin/products')} className="mt-4">
-          Back to Products
-        </Button>
-      </div>
-    );
-  }
-
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <div className="mb-6">
@@ -336,6 +317,23 @@ export default function EditProductPage() {
         <h1 className="text-3xl font-bold mb-6">Edit Product</h1>
 
         <Form form={form} layout="vertical">
+          {loading && (
+            <div className="flex justify-center items-center min-h-[320px]">
+              <Spin size="large" />
+            </div>
+          )}
+
+          {!loading && !product && (
+            <div className="p-8 text-center">
+              <p className="text-gray-600">Product not found</p>
+              <Button type="primary" onClick={() => router.push('/admin/products')} className="mt-4">
+                Back to Products
+              </Button>
+            </div>
+          )}
+
+          {!loading && product && (
+            <>
           <Form.Item
             name="name"
             label="Product Name"
@@ -344,12 +342,14 @@ export default function EditProductPage() {
             <Input placeholder="e.g., REXCO 82 - Brake Cleaner" size="large" />
           </Form.Item>
 
-          <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please enter product description' }]}> 
-            <RichTextEditor 
-              value={form.getFieldValue('description') || ''}
-              onChange={val => form.setFieldsValue({ description: val })}
-              placeholder="Product description..." 
-            />
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[{ required: true, message: 'Please enter product description' }]}
+            valuePropName="value"
+            getValueFromEvent={(value) => value}
+          >
+            <RichTextEditor placeholder="Product description..." />
           </Form.Item>
 
           <Form.Item
@@ -377,7 +377,9 @@ export default function EditProductPage() {
 
               return (
                 <div className="space-y-3">
-                  {fields.map((field, index) => (
+                  {fields.map((field, index) => {
+                    const { key: _key, ...restField } = field;
+                    return (
                     <div
                       key={field.key}
                       className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200"
@@ -412,7 +414,7 @@ export default function EditProductPage() {
                         </div>
 
                         <Form.Item
-                          {...field}
+                          {...restField}
                           name={[field.name, 'text']}
                           rules={[{ required: true, message: 'Isi text feature' }]}
                           className="mb-0 flex-1"
@@ -467,7 +469,8 @@ export default function EditProductPage() {
                         />
                       </Space>
                     </div>
-                  ))}
+                  );
+                  })}
                   <Button
                     type="dashed"
                     icon={<PlusCircleOutlined />}
@@ -488,7 +491,9 @@ export default function EditProductPage() {
           <Form.List name="productStore">
             {(fields, { add, remove }) => (
               <div className="space-y-4">
-                {fields.map((field) => (
+                {fields.map((field) => {
+                  const { key: _key, ...restField } = field;
+                  return (
                   <Card
                     key={field.key}
                     size="small"
@@ -502,7 +507,7 @@ export default function EditProductPage() {
                     }
                   >
                     <Form.Item
-                      {...field}
+                      {...restField}
                       name={[field.name, 'name']}
                       label="Variant Name"
                       rules={[{ required: true, message: 'Required' }]}
@@ -513,14 +518,16 @@ export default function EditProductPage() {
                     <Form.List name={[field.name, 'stores']}>
                       {(storeFields, { add: addStore, remove: removeStore }) => (
                         <div className="space-y-2">
-                          {storeFields.map((storeField) => (
+                          {storeFields.map((storeField) => {
+                            const { key: _key, ...restStoreField } = storeField;
+                            return (
                             <div
                               key={storeField.key}
                               className="grid grid-cols-2 gap-3 items-end"
                             >
                                
                               <Form.Item
-                                {...storeField}
+                                {...restStoreField}
                                 name={[storeField.name, 'name']}
                                 label="Store"
                                 rules={[{ required: true, message: 'Required' }]}
@@ -529,7 +536,7 @@ export default function EditProductPage() {
                               </Form.Item>
                               <div className="flex items-center gap-2">
                                 <Form.Item
-                                  {...storeField}
+                                  {...restStoreField}
                                   name={[storeField.name, 'urlStore']}
                                   label="URL"
                                   className="flex-1"
@@ -545,7 +552,8 @@ export default function EditProductPage() {
                                 />
                               </div>
                             </div>
-                          ))}
+                          );
+                          })}
                           <Button
                             type="dashed"
                             icon={<PlusCircleOutlined />}
@@ -557,7 +565,8 @@ export default function EditProductPage() {
                       )}
                     </Form.List>
                   </Card>
-                ))}
+                );
+                })}
                 <Button
                   type="dashed"
                   icon={<PlusCircleOutlined />}
@@ -674,6 +683,8 @@ export default function EditProductPage() {
               Update Product
             </Button>
           </Space>
+            </>
+          )}
         </Form>
       </Card>
     </div>

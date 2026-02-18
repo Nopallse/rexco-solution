@@ -137,7 +137,7 @@ const WhereToBuyPage = () => {
             </div>
 
             {/* Store Information */}
-            <div>
+            {/* <div>
               <h2 className="text-xl sm:text-2xl font-bold text-primary mb-4">
                 {t.pages?.where_to_buy?.store_info_title || 'Available at your nearest engineering store:'}
               </h2>
@@ -148,7 +148,7 @@ const WhereToBuyPage = () => {
                 <li>{t.pages?.where_to_buy?.electronics || 'Electronics Store'}</li>
                 <li>{t.pages?.where_to_buy?.tool_center || 'Tool Business Center (ITC Glodok, Kenari Market)'}</li>
               </ul>
-            </div>
+            </div> */}
           </div>
 
           {/* Right Side: Online Stores + Modern Market */}

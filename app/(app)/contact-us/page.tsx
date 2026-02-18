@@ -2,9 +2,11 @@
 
 import React, { useState } from "react";
 import { useLanguage } from '@/app/providers/LanguageProvider';
+import { useAppMessage } from '@/app/hooks/useAppMessage';
 
 const ContactPage = () => {
   const { t } = useLanguage();
+  const showMessage = useAppMessage();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -12,6 +14,7 @@ const ContactPage = () => {
     subject: "",
     message: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -20,11 +23,43 @@ const ContactPage = () => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: integrate with backend/email service
-    console.log("Contact form:", form);
-    alert(t.pages?.contact?.success_message || "Thank you! We will contact you soon.");
+    setLoading(true);
+
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+      const response = await fetch(`${baseUrl}/mail/send`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to send email");
+      }
+
+      // Reset form on success
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      });
+
+      showMessage("success", t.pages?.contact?.success_message || "Thank you! We will contact you soon.");
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "An error occurred while sending your message";
+      showMessage("error", errorMessage);
+      console.error("Contact form error:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -90,10 +125,13 @@ const ContactPage = () => {
 
               <button
                 type="submit"
-                className="mt-2 w-full cursor-pointer bg-secondary text-primary font-bold tracking-wide px-6 sm:px-8 lg:px-10 py-4 sm:py-5 text-sm sm:text-base rounded-md hover:bg-primary hover:text-secondary transition-colors"
+                disabled={loading}
+                className="mt-2 w-full cursor-pointer bg-secondary text-primary font-bold tracking-wide px-6 sm:px-8 lg:px-10 py-4 sm:py-5 text-sm sm:text-base rounded-md hover:bg-primary hover:text-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {t.pages?.contact?.send || 'SEND'}
-                <svg aria-hidden="true" className="inline-block ml-2 w-4 h-4" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z"></path></svg>
+                {loading ? "Sending..." : t.pages?.contact?.send || 'SEND'}
+                {!loading && (
+                  <svg aria-hidden="true" className="inline-block ml-2 w-4 h-4" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z"></path></svg>
+                )}
               </button>
             </form>
           </div>

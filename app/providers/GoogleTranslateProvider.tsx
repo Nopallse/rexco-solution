@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/app/providers/LanguageProvider';
 
 declare global {
@@ -14,6 +15,32 @@ export default function GoogleTranslateProvider() {
   const { language } = useLanguage();
   const [isTranslating, setIsTranslating] = useState(false);
   const sourceLang = 'id';
+  const pathname = usePathname();
+  const isAdminRoute = pathname?.startsWith('/admin');
+
+  useEffect(() => {
+    if (!isAdminRoute) return;
+
+    const clearCookie = (name: string) => {
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${window.location.hostname}`;
+    };
+
+    clearCookie('googtrans');
+
+    const frames = document.querySelectorAll('iframe.goog-te-banner-frame, .goog-te-banner-frame');
+    frames.forEach(frame => frame.remove());
+
+    const topDiv = document.querySelector('.skiptranslate') as HTMLElement;
+    if (topDiv?.style) {
+      topDiv.style.display = 'none';
+    }
+
+    document.body.style.top = '0';
+    document.body.style.position = 'static';
+  }, [isAdminRoute]);
+
+  if (isAdminRoute) return null;
 
   useEffect(() => {
     // Set cookie untuk pre-select language
