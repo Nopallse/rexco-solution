@@ -36,24 +36,24 @@ const countries: Country[] = [
 const marketplaces: Marketplace[] = [
   {
     name: "Tokopedia",
-    url: "https://www.tokopedia.com/rexcoofficial",
+    url: "https://www.tokopedia.com/rexco",
     logo: "/images/icon/tokopedia.png",
   },
   {
     name: "Shopee",
-    url: "https://shopee.co.id/rexcoofficial",
+    url: "https://shopee.co.id/rexco.indonesia",
     logo: "/images/icon/shopee.png",
   },
   {
     name: "TikTok Shop",
-    url: "https://www.tiktok.com/shop/rexco-official-store-official",
+    url: "https://vt.tiktok.com/ZSmL2NYKJ/?page=Mall",
     logo: "/images/icon/tiktok_shop.png",
   },
-  {
-    name: "Lazada",
-    url: "https://www.lazada.co.id/",
-    logo: "/images/icon/lazada.png",
-  },
+  // {
+  //   name: "Lazada",
+  //   url: "https://www.lazada.co.id/",
+  //   logo: "/images/icon/lazada.png",
+  // },
   {
     name: "Monotaro",
     url: "https://www.monotaro.id/shopbybrand/brand?brand=rexco",
@@ -62,19 +62,19 @@ const marketplaces: Marketplace[] = [
 
   {
     name: "Fixcomart",
-    url: "https://fixcomart.com/",
+    url: "https://fixcomart.com/collections/rexco?srsltid=AfmBOopj3sZbPG4KNqvd_f_YerYBYuXGWTMyBgsMp4vcJs4HoAfWb2Ch",
     logo: "/images/icon/fixcomart.jpg",
   },
   {
     name: "Indoteknik",
-    url: "https://indoteknik.com/",
+    url: "https://indoteknik.com/shop/brands/rexco-89?srsltid=AfmBOoqJrbzXRE82INFe45tdS457miuqIYEdmj--y7ePnnTKmTCmFrlM",
     logo: "/images/icon/indoteknik.webp",
   },
-  {
-    name: "Blibli",
-    url: "https://www.blibli.com/",
-    logo: "/images/icon/blibli.jpg",
-  },
+  // {
+  //   name: "Blibli",
+  //   url: "https://www.blibli.com/",
+  //   logo: "/images/icon/blibli.jpg",
+  // },
 ];
 
 const modernMarkets: Marketplace[] = [
