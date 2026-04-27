@@ -181,7 +181,7 @@ const GalleryPage = () => {
         </Space>
       </div>
 
-      <Card bordered={false} className="shadow-sm">
+      <Card variant="borderless" className="shadow-sm">
         <div className="mb-4">
           <Input
             placeholder="Search gallery by title..."

@@ -43,7 +43,9 @@ export default function AdminDashboard() {
               title="Revenue"
               value={123456}
               prefix="$"
-              valueStyle={{ color: '#52c41a' }}
+              styles={{
+                content: { color: '#52c41a' },
+              }}
             />
           </Card>
         </Col>

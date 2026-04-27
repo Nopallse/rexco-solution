@@ -173,7 +173,7 @@ const ProductsPage = () => {
         </Space>
       </div>
 
-      <Card bordered={false} className="shadow-sm">
+      <Card variant="borderless" className="shadow-sm">
         <div className="mb-4">
           <Input
             placeholder="Search products by name..."

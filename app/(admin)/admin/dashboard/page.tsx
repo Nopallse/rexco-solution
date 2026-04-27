@@ -1,24 +1,20 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { Card, Row, Col, Statistic, Table, Tag, Space, Button } from 'antd';
+import React, { useEffect, useState } from "react";
+import { Card, Row, Col, Statistic, Table, Tag, Space, Button } from "antd";
 import {
   AppstoreOutlined,
   FileTextOutlined,
   BookOutlined,
-  ShopOutlined,
-  ArrowUpOutlined,
-  ArrowDownOutlined,
   EyeOutlined,
-  EditOutlined,
   PictureOutlined,
-} from '@ant-design/icons';
-import type { ColumnsType } from 'antd/es/table';
-import { useRouter } from 'next/navigation';
-import { listProducts } from '@/app/lib/product-client';
-import { getPublicArticles } from '@/app/lib/article-api';
-import { listDocuments } from '@/app/lib/document-client';
-import { listGallery } from '@/app/lib/gallery-client';
+} from "@ant-design/icons";
+import type { ColumnsType } from "antd/es/table";
+import { useRouter } from "next/navigation";
+import { listProducts } from "@/app/lib/product-client";
+import { getPublicArticles } from "@/app/lib/article-api";
+import { listDocuments } from "@/app/lib/document-client";
+import { listGallery } from "@/app/lib/gallery-client";
 
 interface RecentActivity {
   key: string;
@@ -39,13 +35,15 @@ const DashboardPage = () => {
     documents: 0,
     galleries: 0,
   });
-  const [recentActivities, setRecentActivities] = useState<RecentActivity[]>([]);
+  const [recentActivities, setRecentActivities] = useState<RecentActivity[]>(
+    [],
+  );
 
   useEffect(() => {
     async function fetchDashboardData() {
       try {
         setLoading(true);
-        
+
         // Fetch all data in parallel
         const [products, articles, documents, galleries] = await Promise.all([
           listProducts(),
@@ -69,10 +67,10 @@ const DashboardPage = () => {
         products.slice(0, 3).forEach((product) => {
           activities.push({
             key: `product-${product.id}`,
-            type: 'Product',
+            type: "Product",
             title: product.name,
-            status: 'published',
-            date: new Date().toISOString().split('T')[0],
+            status: "published",
+            date: new Date().toISOString().split("T")[0],
             id: product.id,
             slug: product.slug,
           });
@@ -82,12 +80,12 @@ const DashboardPage = () => {
         articles.slice(0, 3).forEach((article) => {
           activities.push({
             key: `article-${article.id}`,
-            type: 'Article',
+            type: "Article",
             title: article.title,
-            status: article.publishedAt ? 'published' : 'draft',
-            date: article.publishedAt 
-              ? new Date(article.publishedAt).toISOString().split('T')[0]
-              : new Date(article.createdAt || '').toISOString().split('T')[0],
+            status: article.publishedAt ? "published" : "draft",
+            date: article.publishedAt
+              ? new Date(article.publishedAt).toISOString().split("T")[0]
+              : new Date(article.createdAt || "").toISOString().split("T")[0],
             id: article.id,
             slug: article.slug,
           });
@@ -97,20 +95,21 @@ const DashboardPage = () => {
         documents.slice(0, 2).forEach((doc) => {
           activities.push({
             key: `document-${doc.id}`,
-            type: 'Document',
+            type: "Document",
             title: doc.title,
-            status: 'published',
-            date: new Date().toISOString().split('T')[0],
+            status: "published",
+            date: new Date().toISOString().split("T")[0],
             id: doc.id,
           });
         });
 
         // Sort by date and take top 5
-        activities.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        activities.sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+        );
         setRecentActivities(activities.slice(0, 5));
-
       } catch (error) {
-        console.error('Failed to fetch dashboard data:', error);
+        console.error("Failed to fetch dashboard data:", error);
       } finally {
         setLoading(false);
       }
@@ -121,48 +120,54 @@ const DashboardPage = () => {
 
   const columns: ColumnsType<RecentActivity> = [
     {
-      title: 'Type',
-      dataIndex: 'type',
-      key: 'type',
+      title: "Type",
+      dataIndex: "type",
+      key: "type",
       render: (type: string) => (
-        <Tag color={
-          type === 'Product' ? 'blue' : 
-          type === 'Article' ? 'green' : 
-          type === 'Document' ? 'orange' : 'purple'
-        }>
+        <Tag
+          color={
+            type === "Product"
+              ? "blue"
+              : type === "Article"
+                ? "green"
+                : type === "Document"
+                  ? "orange"
+                  : "purple"
+          }
+        >
           {type}
         </Tag>
       ),
     },
     {
-      title: 'Title',
-      dataIndex: 'title',
-      key: 'title',
+      title: "Title",
+      dataIndex: "title",
+      key: "title",
       ellipsis: true,
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
       render: (status: string) => (
-        <Tag color={status === 'published' ? 'success' : 'default'}>
+        <Tag color={status === "published" ? "success" : "default"}>
           {status.toUpperCase()}
         </Tag>
       ),
     },
     {
-      title: 'Date',
-      dataIndex: 'date',
-      key: 'date',
+      title: "Date",
+      dataIndex: "date",
+      key: "date",
     },
     {
-      title: 'Action',
-      key: 'action',
+      title: "Action",
+      key: "action",
       render: (_, record) => (
         <Space size="small">
-          <Button 
-            type="text" 
-            icon={<EyeOutlined />} 
+          <Button
+            type="text"
+            icon={<EyeOutlined />}
             size="small"
             onClick={() => handleView(record)}
           />
@@ -172,19 +177,19 @@ const DashboardPage = () => {
   ];
 
   const handleView = (record: RecentActivity) => {
-    if (record.type === 'Product' && record.slug) {
+    if (record.type === "Product" && record.slug) {
       router.push(`/product/${record.slug}`);
-    } else if (record.type === 'Article' && record.slug) {
+    } else if (record.type === "Article" && record.slug) {
       router.push(`/blog/${record.slug}`);
     }
   };
 
   const handleEdit = (record: RecentActivity) => {
-    if (record.type === 'Product') {
+    if (record.type === "Product") {
       router.push(`/admin/products/edit/${record.id}`);
-    } else if (record.type === 'Article') {
+    } else if (record.type === "Article") {
       router.push(`/admin/articles/edit/${record.id}`);
-    } else if (record.type === 'Document') {
+    } else if (record.type === "Document") {
       router.push(`/admin/documents`);
     }
   };
@@ -193,53 +198,103 @@ const DashboardPage = () => {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Dashboard</h1>
-        <p className="text-gray-600">Welcome back! Here's what's happening with your store today.</p>
+        <p className="text-gray-600">
+          Welcome back! Here's what's happening with your store today.
+        </p>
       </div>
 
       <Row gutter={[16, 16]} className="mb-6">
         <Col xs={24} sm={12} lg={6}>
-          <Card bordered={false} className="shadow-sm hover:shadow-md transition-shadow">
+          <Card
+            variant="borderless"
+            className="shadow-sm hover:shadow-md transition-shadow"
+          >
             <Statistic
-              title={<span className="text-gray-600 font-medium">Total Products</span>}
+              title={
+                <span className="text-gray-600 font-medium">
+                  Total Products
+                </span>
+              }
               value={stats.products}
               prefix={<AppstoreOutlined className="text-blue-600" />}
-              valueStyle={{ color: '#1890ff', fontSize: '28px', fontWeight: 600 }}
+              styles={{
+                content: {
+                  color: "#1890ff",
+                  fontSize: "28px",
+                  fontWeight: 600,
+                },
+              }}
               loading={loading}
             />
           </Card>
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
-          <Card bordered={false} className="shadow-sm hover:shadow-md transition-shadow">
+          <Card
+            variant="borderless"
+            className="shadow-sm hover:shadow-md transition-shadow"
+          >
             <Statistic
-              title={<span className="text-gray-600 font-medium">Articles</span>}
+              title={
+                <span className="text-gray-600 font-medium">Articles</span>
+              }
               value={stats.articles}
               prefix={<BookOutlined className="text-green-600" />}
-              valueStyle={{ color: '#52c41a', fontSize: '28px', fontWeight: 600 }}
+              styles={{
+                content: {
+                  color: "#52c41a",
+                  fontSize: "28px",
+                  fontWeight: 600,
+                },
+              }}
               loading={loading}
             />
           </Card>
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
-          <Card bordered={false} className="shadow-sm hover:shadow-md transition-shadow">
+          <Card
+            variant="borderless"
+            className="shadow-sm hover:shadow-md transition-shadow"
+          >
             <Statistic
-              title={<span className="text-gray-600 font-medium">Documents</span>}
+              title={
+                <span className="text-gray-600 font-medium">Documents</span>
+              }
               value={stats.documents}
               prefix={<FileTextOutlined className="text-orange-600" />}
-              valueStyle={{ color: '#fa8c16', fontSize: '28px', fontWeight: 600 }}
+              styles={{
+                content: {
+                  color: "#fa8c16",
+                  fontSize: "28px",
+                  fontWeight: 600,
+                },
+              }}
               loading={loading}
             />
           </Card>
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
-          <Card bordered={false} className="shadow-sm hover:shadow-md transition-shadow">
+          <Card
+            variant="borderless"
+            className="shadow-sm hover:shadow-md transition-shadow"
+          >
             <Statistic
-              title={<span className="text-gray-600 font-medium">Gallery Images</span>}
+              title={
+                <span className="text-gray-600 font-medium">
+                  Gallery Images
+                </span>
+              }
               value={stats.galleries}
               prefix={<PictureOutlined className="text-purple-600" />}
-              valueStyle={{ color: '#722ed1', fontSize: '28px', fontWeight: 600 }}
+              styles={{
+                content: {
+                  color: "#722ed1",
+                  fontSize: "28px",
+                  fontWeight: 600,
+                },
+              }}
               loading={loading}
             />
           </Card>
@@ -249,8 +304,12 @@ const DashboardPage = () => {
       <Row gutter={[16, 16]}>
         <Col>
           <Card
-            title={<span className="font-semibold text-gray-900">Recent Activities</span>}
-            bordered={false}
+            title={
+              <span className="font-semibold text-gray-900">
+                Recent Activities
+              </span>
+            }
+            variant="borderless"
             className="shadow-sm"
           >
             <Table

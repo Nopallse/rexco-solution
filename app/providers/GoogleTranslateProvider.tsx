@@ -40,9 +40,9 @@ export default function GoogleTranslateProvider() {
     document.body.style.position = 'static';
   }, [isAdminRoute]);
 
-  if (isAdminRoute) return null;
-
   useEffect(() => {
+    if (isAdminRoute) return;
+
     // Set cookie untuk pre-select language
     const setCookie = (lang: string) => {
       const value = `/${sourceLang}/${lang}`;
@@ -92,6 +92,8 @@ export default function GoogleTranslateProvider() {
 
   // Remove banner Google Translate
   useEffect(() => {
+    if (isAdminRoute) return;
+
     const removeBanner = () => {
       // Remove iframe banner
       const frames = document.querySelectorAll('iframe.goog-te-banner-frame, .goog-te-banner-frame');
@@ -113,6 +115,8 @@ export default function GoogleTranslateProvider() {
 
     return () => clearInterval(interval);
   }, []);
+
+  if (isAdminRoute) return null;
 
   return (
     <>
