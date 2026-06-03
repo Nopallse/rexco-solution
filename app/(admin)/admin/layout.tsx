@@ -16,7 +16,6 @@ import {
   LogoutOutlined,
   SettingOutlined,
   FileImageOutlined,
-  InstagramOutlined,
   PictureOutlined,
 } from '@ant-design/icons';
 import Link from 'next/link';
@@ -75,11 +74,6 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       icon: <FileImageOutlined />,
       label: 'Gallery',
       children: [
-        {
-          key: '/admin/gallery/instagram',
-          icon: <InstagramOutlined />,
-          label: <Link href="/admin/gallery/instagram">Instagram</Link>,
-        },
         {
           key: '/admin/gallery/web-gallery',
           icon: <PictureOutlined />,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { listInstagram, type InstagramDto } from "@/app/lib/instagram-client";
+import { listInstagram, type InstagramDto, type InstagramListResponse } from "@/app/lib/instagram-client";
 import { listGallery, type GalleryDto } from "@/app/lib/gallery-client";
 import { getImageUrl } from "@/app/lib/image-utils";
 import { useLanguage } from '@/app/providers/LanguageProvider';
@@ -19,11 +19,11 @@ export default function GalleryPage() {
       setLoading(true);
       try {
         const [ig, gal] = await Promise.all([
-          listInstagram().catch(() => []),
+          listInstagram().catch(() => ({ posts: [], paging: undefined } as InstagramListResponse)),
           listGallery().catch(() => []),
         ]);
         if (!cancelled) {
-          setInstagramItems(ig || []);
+          setInstagramItems(ig?.posts || []);
           setGalleryItems(gal || []);
         }
       } catch (e) {

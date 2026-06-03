@@ -11,6 +11,20 @@ export type InstagramDto = {
   title?: string | null;
   link?: string | null;
   image?: string | null;
+  created_at?: string | null;
+};
+
+export type InstagramPaging = {
+  cursors?: {
+    before?: string;
+    after?: string;
+  };
+  next?: string;
+};
+
+export type InstagramListResponse = {
+  posts: InstagramDto[];
+  paging?: InstagramPaging;
 };
 
 async function parseJsonSafe(response: Response) {
@@ -54,9 +68,9 @@ function authFetch(input: string, init?: FetchOptions) {
   return fetch(input, { ...init, headers });
 }
 
-export async function listInstagram(): Promise<InstagramDto[]> {
+export async function listInstagram(): Promise<InstagramListResponse> {
   const response = await fetch(`${API_BASE}/instagram`, { cache: "no-store" });
-  return handleResponse<InstagramDto[]>(response);
+  return handleResponse<InstagramListResponse>(response);
 }
 
 export type InstagramForm = {
