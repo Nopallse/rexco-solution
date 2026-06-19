@@ -5,28 +5,26 @@ import { Layout, Menu, Avatar, Dropdown, Space, Typography } from 'antd';
 import {
   DashboardOutlined,
   AppstoreOutlined,
-  FileTextOutlined,
   BookOutlined,
-  TagsOutlined,
   FilePdfOutlined,
-  ShopOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
   LogoutOutlined,
-  SettingOutlined,
   FileImageOutlined,
   PictureOutlined,
 } from '@ant-design/icons';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { logout } from '@/app/lib/auth-client';
+import { useAuthGuard } from '@/app/hooks/useAuthGuard';
 import type { MenuProps } from 'antd';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
+  const { auth, ready } = useAuthGuard();
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -97,6 +95,8 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     if (pathname.startsWith('/admin/categories')) return pathname;
     return pathname;
   };
+
+  if (!ready || !auth) return null;
 
   return (
     <Layout className="min-h-screen">

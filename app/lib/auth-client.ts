@@ -72,6 +72,22 @@ export function clearStoredAuth() {
   document.cookie = "rexco_token=; Max-Age=0; path=/; SameSite=Lax";
 }
 
+export async function validateToken(token: string): Promise<void> {
+  const response = await fetch(`${API_BASE}/auth/validate-token`, {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    const message = await safeErrorMessage(response);
+    throw new Error(message ?? "Unauthorized");
+  }
+}
+
 export async function login(email: string, password: string): Promise<AuthSession> {
   const response = await fetch(`${API_BASE}/auth/login`, {
     method: "POST",

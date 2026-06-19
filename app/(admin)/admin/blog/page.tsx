@@ -6,7 +6,6 @@ import {
   Button,
   Space,
   Input,
-  Tag,
   Popconfirm,
   Card,
   Spin,
@@ -31,6 +30,11 @@ import {
 import dayjs from 'dayjs';
 import ArticleForm from '@/app/components/ArticleForm';
 import { getImageUrl } from '@/app/lib/image-utils';
+
+const getErrorMessage = (error: unknown, fallback: string) => {
+  if (error instanceof Error && error.message) return error.message;
+  return fallback;
+};
 
 const BlogPage = () => {
   const { auth, ready } = useAuthGuard();
@@ -64,7 +68,7 @@ const BlogPage = () => {
       setArticles(list);
       setFilteredArticles(list);
     } catch (error) {
-      message.error('Failed to load articles');
+      message.error(getErrorMessage(error, 'Failed to load articles'));
       console.error(error);
     } finally {
       setLoading(false);
@@ -104,7 +108,12 @@ const BlogPage = () => {
 
       await loadArticles();
     } catch (error) {
-      message.error(editingArticle ? 'Failed to update article' : 'Failed to create article');
+      message.error(
+        getErrorMessage(
+          error,
+          editingArticle ? 'Failed to update article' : 'Failed to create article'
+        )
+      );
       console.error(error);
       throw error;
     } finally {
@@ -118,7 +127,7 @@ const BlogPage = () => {
       message.success('Article deleted successfully');
       loadArticles();
     } catch (error) {
-      message.error('Failed to delete article');
+      message.error(getErrorMessage(error, 'Failed to delete article'));
       console.error(error);
     }
   };
